@@ -1,6 +1,9 @@
 'use strict'
 
-module.exports = function (options) {
+const fp = require('fastify-plugin')
+
+const internals = {}
+internals.factory = function (options) {
   const defaultOptions = {
     keys: new Set(),
     errorResponse (err) {
@@ -37,3 +40,12 @@ module.exports = function (options) {
 
   return bearerAuthHook
 }
+
+function plugin (fastify, options, next) {
+  const hook = internals.factory(options)
+  fastify.addHook('preHandler', hook)
+  next()
+}
+
+module.exports = fp(plugin, '>=0.15.0')
+module.exports.internals = internals

@@ -26,8 +26,14 @@
   },
   "homepage": "https://github.com/jsumners/fastify-bearer-auth#readme",
   "devDependencies": {
+    "abstract-logging": "^1.0.0",
+    "fastify": "^0.15.1",
     "pre-commit": "^1.2.2",
+    "request": "^2.81.0",
     "standard": "^10.0.1",
     "tap": "^10.3.2"
+  },
+  "dependencies": {
+    "fastify-plugin": "^0.1.0"
   }
 }
