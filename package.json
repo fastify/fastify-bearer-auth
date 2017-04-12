@@ -1,0 +1,33 @@
+{
+  "name": "fastify-bearer-auth",
+  "version": "1.0.0",
+  "description": "An authentication plugin for Fastify",
+  "main": "plugin.js",
+  "scripts": {
+    "test": "tap 'test/**/*.js'",
+    "lint": "standard"
+  },
+  "precommit": [
+    "lint",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jsumners/fastify-bearer-auth.git"
+  },
+  "keywords": [
+    "fastify",
+    "authentication"
+  ],
+  "author": "James Sumners <james.sumners@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsumners/fastify-bearer-auth/issues"
+  },
+  "homepage": "https://github.com/jsumners/fastify-bearer-auth#readme",
+  "devDependencies": {
+    "pre-commit": "^1.2.2",
+    "standard": "^10.0.1",
+    "tap": "^10.3.2"
+  }
+}
