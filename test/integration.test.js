@@ -6,42 +6,6 @@ const fastify = require('fastify')({logger: require('abstract-logging')})
 const request = require('request')
 const plugin = require('../')
 
-test('successful route', (t) => {
-  t.plan(1)
-  try {
-    fastify.get('/test1', (req, res) => {
-      res.send({hello: 'world'})
-    })
-    t.pass()
-  } catch (e) {
-    t.fail(e.message)
-  }
-})
-
-test('invalid key route', (t) => {
-  t.plan(1)
-  try {
-    fastify.get('/test2', (req, res) => {
-      res.send({hello: 'world'})
-    })
-    t.pass()
-  } catch (e) {
-    t.fail(e.message)
-  }
-})
-
-test('missing header route', (t) => {
-  t.plan(1)
-  try {
-    fastify.get('/test3', (req, res) => {
-      res.send({hello: 'world'})
-    })
-    t.pass()
-  } catch (e) {
-    t.fail(e.message)
-  }
-})
-
 fastify.register(
   plugin,
   {keys: new Set(['123456'])},
@@ -62,6 +26,9 @@ fastify.listen(0, (err) => {
 
   test('success route succeeds', (t) => {
     t.plan(3)
+    fastify.get('/test1', (req, res) => {
+      res.send({hello: 'world'})
+    })
     req({uri: '/test1', auth: {bearer: '123456'}}, (err, response, body) => {
       t.error(err)
       t.strictEqual(response.statusCode, 200)
@@ -71,6 +38,9 @@ fastify.listen(0, (err) => {
 
   test('invalid key route fails correctly', (t) => {
     t.plan(3)
+    fastify.get('/test2', (req, res) => {
+      res.send({hello: 'world'})
+    })
     req({uri: '/test2', auth: {bearer: '654321'}}, (err, response, body) => {
       t.error(err)
       t.strictEqual(response.statusCode, 401)
@@ -80,6 +50,9 @@ fastify.listen(0, (err) => {
 
   test('missing header route fails correctly', (t) => {
     t.plan(3)
+    fastify.get('/test3', (req, res) => {
+      res.send({hello: 'world'})
+    })
     req({uri: '/test3'}, (err, response, body) => {
       t.error(err)
       t.strictEqual(response.statusCode, 401)
