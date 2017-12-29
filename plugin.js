@@ -11,10 +11,8 @@ internals.factory = function (options) {
     },
     contentType: undefined
   }
-  const _options = Object.assign(defaultOptions, options || {})
-  const keys = _options.keys
-  const errorResponse = _options.errorResponse
-  const contentType = _options.contentType
+  const _options = Object.assign({}, defaultOptions, options || {})
+  const {keys, errorResponse, contentType} = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
     const header = fastifyReq.req.headers['authorization']
@@ -47,5 +45,7 @@ function plugin (fastify, options, next) {
   next()
 }
 
-module.exports = fp(plugin, '>=0.15.0')
+module.exports = fp(plugin, {
+  fastify: '>=0.37.0'
+})
 module.exports.internals = internals

@@ -3,7 +3,7 @@
 *fastify-bearer-auth* provides a simple request hook for the [Fastify][fastify]
 web framework.
 
-[fastify]: https://github.com/fastify/fastify
+[fastify]: https://fastify.io/
 
 ## Example
 
@@ -14,22 +14,17 @@ const fastify = require('fastify')
 const bearerAuthPlugin = require('fastify-bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
-fastify.register(bearerAuthPlugin, {keys}, (err) => {
-  if (err) {
-    console.error(err.message)
-    process.exit(1)
-  }
-})
+fastify.register(bearerAuthPlugin, {keys})
 fastify.get('/foo', (req, reply) => {
   reply({authenticated: true})
 })
 
 fastify.listen({port: 8000}, (err) => {
   if (err) {
-    console.error(err.message)
+    fastify.log.error(err.message)
     process.exit(1)
   }
-  console.log.info('http://127.0.0.1:8000/foo')
+  fastify.log.info('http://127.0.0.1:8000/foo')
 })
 ```
 
