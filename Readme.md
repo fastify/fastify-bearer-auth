@@ -1,5 +1,7 @@
 # fastify-bearer-auth
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-bearer-auth.svg)](https://greenkeeper.io/)
+
 *fastify-bearer-auth* provides a simple request hook for the [Fastify][fastify]
 web framework.
 
