@@ -39,13 +39,13 @@ documentation and examples for more details.
 
 When registering the plugin you must specify a configuration object:
 
-* keys: A `Set` or array with valid keys of type `string` (required)
-* errorResponse(err): method must synchronously return the content body to be
+* `keys`: A `Set` or array with valid keys of type `string` (required)
+* `function errorResponse (err) {}`: method must synchronously return the content body to be
 sent to the client (optional)
-* contentType: If the content to be sent is anything other than
+* `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
 
-The default config object is:
+The default configuration object is:
 
   ```js
   {
