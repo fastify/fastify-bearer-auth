@@ -1,17 +1,18 @@
 'use strict'
 
 const fp = require('fastify-plugin')
+const compare = require('secure-compare')
 
-const internals = {}
-internals.factory = function (options) {
+function factory (options) {
   const defaultOptions = {
-    keys: new Set(),
+    keys: [],
     errorResponse (err) {
       return {error: err.message}
     },
     contentType: undefined
   }
   const _options = Object.assign({}, defaultOptions, options || {})
+  if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
   const {keys, errorResponse, contentType} = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
@@ -25,7 +26,7 @@ internals.factory = function (options) {
     }
 
     const key = header.substring(6).trim()
-    if (keys.has(key) === false) {
+    if (authenticate(keys, key) === undefined) {
       const invalidKeyError = Error('invalid authorization header')
       fastifyReq.log.error('invalid authorization header: `%s`', header)
       if (contentType) fastifyRes.header('content-type', contentType)
@@ -39,9 +40,12 @@ internals.factory = function (options) {
   return bearerAuthHook
 }
 
+function authenticate (keys, key) {
+  return keys.find((a) => compare(a, key))
+}
+
 function plugin (fastify, options, next) {
-  const hook = internals.factory(options)
-  fastify.addHook('preHandler', hook)
+  fastify.addHook('preHandler', factory(options))
   next()
 }
 
@@ -49,4 +53,4 @@ module.exports = fp(plugin, {
   fastify: '^1.0.0',
   name: 'fastify-bearer-auth'
 })
-module.exports.internals = internals
+module.exports.internals = { factory }

@@ -37,13 +37,15 @@ you to register the plugin within scoped paths. Therefore, you could have some
 paths that are not protected by the plugin and others that are. See the *Fastify*
 documentation and examples for more details.
 
-When registering the plugin you must specify a configuration object that at
-least has a `keys` property set to an object that supports a `has(key)` method.
-It may also have a method `errorResponse(err)` and property `contentType`. If set,
-the `errorResponse(err)` method must synchronously return the content body to be
-sent to the client. If the content to be sent is anything other than
-`application/json`, then the `contentType` property must be set. The default
-config object is:
+When registering the plugin you must specify a configuration object:
+
+* `keys`: A `Set` or array with valid keys of type `string` (required)
+* `function errorResponse (err) {}`: method must synchronously return the content body to be
+sent to the client (optional)
+* `contentType`: If the content to be sent is anything other than
+`application/json`, then the `contentType` property must be set (optional)
+
+The default configuration object is:
 
   ```js
   {
@@ -58,7 +60,7 @@ config object is:
 Internally, the plugin registers a standard *Fastify* [preHandler hook][prehook]
 which will inspect the request's headers for an `authorization` header with the
 format `bearer key`. The `key` will be matched against the configured `keys`
-object via the `has(key)` method. If the `authorization` header is missing,
+object via a [constant time alogrithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time) to prevent against [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the `authorization` header is missing,
 malformed, or the `key` does not validate then a 401 response will be sent with
 a `{error: message}` body; no further request processing will be performed.
 
