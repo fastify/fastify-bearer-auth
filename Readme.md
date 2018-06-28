@@ -12,7 +12,7 @@ web framework.
 ```js
 'use strict'
 
-const fastify = require('fastify')
+const fastify = require('fastify')()
 const bearerAuthPlugin = require('fastify-bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
