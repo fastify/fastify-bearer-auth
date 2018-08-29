@@ -32,7 +32,7 @@
     "pre-commit": "^1.2.2",
     "request": "2.86.0",
     "snazzy": "^7.1.1",
-    "standard": "^11.0.1",
+    "standard": "^12.0.0",
     "tap": "^12.0.0"
   },
   "dependencies": {
