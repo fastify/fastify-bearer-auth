@@ -7,13 +7,13 @@ function factory (options) {
   const defaultOptions = {
     keys: [],
     errorResponse (err) {
-      return {error: err.message}
+      return { error: err.message }
     },
     contentType: undefined
   }
   const _options = Object.assign({}, defaultOptions, options || {})
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
-  const {keys, errorResponse, contentType} = _options
+  const { keys, errorResponse, contentType } = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
     const header = fastifyReq.req.headers['authorization']
