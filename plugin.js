@@ -50,7 +50,7 @@ function plugin (fastify, options, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '>= 1.0.0',
+  fastify: '^1.0.0',
   name: 'fastify-bearer-auth'
 })
 module.exports.internals = { factory }
