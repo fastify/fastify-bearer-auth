@@ -1,6 +1,6 @@
 {
   "name": "fastify-bearer-auth",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "An authentication plugin for Fastify",
   "main": "plugin.js",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/fastify/fastify-bearer-auth#readme",
   "devDependencies": {
-    "fastify": "^2.0.0-rc.6",
+    "fastify": "^2.0.0",
     "pre-commit": "^1.2.2",
     "request": "2.88.0",
     "snazzy": "^8.0.0",
