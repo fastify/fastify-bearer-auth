@@ -45,12 +45,12 @@ function authenticate (keys, key) {
 }
 
 function plugin (fastify, options, next) {
-  fastify.addHook('preHandler', factory(options))
+  fastify.addHook('onRequest', factory(options))
   next()
 }
 
 module.exports = fp(plugin, {
-  fastify: '^1.0.0',
+  fastify: '^2.0.0',
   name: 'fastify-bearer-auth'
 })
 module.exports.internals = { factory }
