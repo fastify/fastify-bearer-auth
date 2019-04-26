@@ -44,6 +44,7 @@ When registering the plugin you must specify a configuration object:
 sent to the client (optional)
 * `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
+* `bearerType`: string specifying the Bearer string (optional)
 
 The default configuration object is:
 
@@ -51,6 +52,7 @@ The default configuration object is:
   {
     keys: new Set(),
     contentType: undefined,
+    bearerType: 'Bearer'
     errorResponse: (err) => {
       return {error: err.message}
     }
