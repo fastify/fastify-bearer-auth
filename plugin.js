@@ -9,11 +9,12 @@ function factory (options) {
     errorResponse (err) {
       return { error: err.message }
     },
-    contentType: undefined
+    contentType: undefined,
+    bearerType: 'Bearer'
   }
   const _options = Object.assign({}, defaultOptions, options || {})
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
-  const { keys, errorResponse, contentType } = _options
+  const { keys, errorResponse, contentType, bearerType } = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
     const header = fastifyReq.req.headers['authorization']
@@ -25,7 +26,7 @@ function factory (options) {
       return
     }
 
-    const key = header.substring(6).trim()
+    const key = header.substring(bearerType.length).trim()
     if (authenticate(keys, key) === undefined) {
       const invalidKeyError = Error('invalid authorization header')
       fastifyReq.log.error('invalid authorization header: `%s`', header)

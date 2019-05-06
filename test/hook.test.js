@@ -97,6 +97,32 @@ test('hook accepts correct header', (t) => {
   })
 })
 
+test('hook accepts correct header and alternate Bearer', (t) => {
+  t.plan(1)
+
+  const bearerAlt = 'BearerAlt'
+  const keysAlt = { keys: new Set([key]), bearerType: bearerAlt }
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `BearerAlt ${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send: send
+  }
+
+  function send (body) {
+    t.fail('should not happen')
+  }
+
+  const hook = plugin(keysAlt)
+  hook(request, response, () => {
+    t.pass()
+  })
+})
+
 test('hook accepts correct header with extra padding', (t) => {
   t.plan(1)
 
