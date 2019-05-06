@@ -5,6 +5,8 @@ const noop = () => {}
 const plugin = require('../').internals.factory
 const key = '123456789012354579814'
 const keys = { keys: new Set([key]) }
+const bearerAlt = 'BearerAlt'
+const keysAlt = { keys: new Set([key]), bearerType: bearerAlt }
 
 test('hook rejects for missing header', (t) => {
   t.plan(2)
@@ -92,6 +94,30 @@ test('hook accepts correct header', (t) => {
   }
 
   const hook = plugin(keys)
+  hook(request, response, () => {
+    t.pass()
+  })
+})
+
+test('hook accepts correct header and alternate Bearer', (t) => {
+  t.plan(1)
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `BearerAlt ${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send: send
+  }
+
+  function send (body) {
+    t.fail('should not happen')
+  }
+
+  const hook = plugin(keysAlt)
   hook(request, response, () => {
     t.pass()
   })
