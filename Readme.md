@@ -52,7 +52,7 @@ The default configuration object is:
   {
     keys: new Set(),
     contentType: undefined,
-    bearerType: 'Bearer'
+    bearerType: 'Bearer',
     errorResponse: (err) => {
       return {error: err.message}
     }
