@@ -52,7 +52,7 @@ or promise rejects authentication will fail (see `failSilent`). If `auth` is a f
 be ignored. 
 * `failSilent`: if set to true and `auth` is specified any error or rejection occurred while calling `auth`
 will be returned with a 401 status and a invalid authorization header. If set to false it will return a 
-500 status wit the error or the rejection. 
+500 status with the error or the rejection. 
 
 
 The default configuration object is:
