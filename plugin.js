@@ -6,6 +6,8 @@ const compare = require('secure-compare')
 function factory (options) {
   const defaultOptions = {
     keys: [],
+    auth: undefined,
+    failSilent: true,
     errorResponse (err) {
       return { error: err.message }
     },
@@ -14,7 +16,7 @@ function factory (options) {
   }
   const _options = Object.assign({}, defaultOptions, options || {})
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
-  const { keys, errorResponse, contentType, bearerType } = _options
+  const { keys, errorResponse, contentType, bearerType, auth, failSilent } = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
     const header = fastifyReq.req.headers['authorization']
@@ -27,15 +29,33 @@ function factory (options) {
     }
 
     const key = header.substring(bearerType.length).trim()
-    if (authenticate(keys, key) === undefined) {
-      const invalidKeyError = Error('invalid authorization header')
-      fastifyReq.log.error('invalid authorization header: `%s`', header)
-      if (contentType) fastifyRes.header('content-type', contentType)
-      fastifyRes.code(401).send(errorResponse(invalidKeyError))
-      return
+    let retVal
+    if (auth && auth instanceof Function) {
+      try {
+        retVal = auth(key)
+      } catch (err) {
+        retVal = Promise.reject(err)
+      }
+    } else {
+      retVal = authenticate(keys, key)
     }
 
-    next()
+    const invalidKeyError = Error('invalid authorization header')
+    Promise.resolve(retVal).then((val) => {
+      if (!val) {
+        fastifyReq.log.error('invalid authorization header: `%s`', header)
+        if (contentType) fastifyRes.header('content-type', contentType)
+        fastifyRes.code(401).send(errorResponse(invalidKeyError))
+        return
+      }
+      next()
+    }).catch((err) => {
+      if (failSilent) {
+        fastifyRes.code(401).send(errorResponse(invalidKeyError))
+      } else {
+        fastifyRes.code(500).send(errorResponse(err instanceof Error ? err : Error(String(err))))
+      }
+    })
   }
 
   return bearerAuthHook
