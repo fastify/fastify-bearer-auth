@@ -49,7 +49,7 @@ sent to the client (optional)
 must return a truthy value  or a promise that resolves to a truthy value. If function resolves to
 falsey values (false,null,undefined,0) authentication will fail with 401 value. If function fails
 or promise rejects authentication will fail (see `failSilent`). If `auth` is a function, `keys` will 
-be ignored. 
+be ignored. If `auth` is not a function or undefined, `keys` will be used.  
 * `failSilent`: if set to true and `auth` is specified any error or rejection occurred while calling `auth`
 will be returned with a 401 status and a invalid authorization header. If set to false it will return a 
 500 status with the error or the rejection. 
