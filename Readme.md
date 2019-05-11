@@ -45,15 +45,13 @@ sent to the client (optional)
 * `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
 * `bearerType`: string specifying the Bearer string (optional)
-* `function auth (key) {}` : this function will test if a key is valid. If the key is valid it
-must return a truthy value  or a promise that resolves to a truthy value. If function resolves to
-falsey values (false,null,undefined,0) authentication will fail with 401 value. If function fails
-or promise rejects authentication will fail (see `failSilent`). If `auth` is a function, `keys` will 
-be ignored. If `auth` is not a function or undefined, `keys` will be used.  
-* `failSilent`: if set to true and `auth` is specified any error or rejection occurred while calling `auth`
-will be returned with a 401 status and a invalid authorization header. If set to false it will return a 
-500 status with the error or the rejection. 
-
+* `function auth (key, req) {}` : this function will test if `key` is a valid token.
+   The function must return literal `true` if the key is accepted or literal `false`
+   if rejected. The function may return also a promise that resolves to one of this
+   values. If the function returns or resolves to another value, rejects or throws 
+   it will send an HTTP status 500. `req` will contain the request object. If `auth`
+   is a function, `keys` will be ignored. If `auth` is not a function or undefined,
+   `keys` will be used.
 
 The default configuration object is:
 
@@ -65,8 +63,7 @@ The default configuration object is:
     errorResponse: (err) => {
       return {error: err.message}
     },
-    auth: undefined,
-    failSilent: true
+    auth: undefined
   }
   ```
 
