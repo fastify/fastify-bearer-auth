@@ -294,7 +294,7 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
   })
 })
 
-test('hook  rejects with 500 when functions fails', (t) => {
+test('hook rejects with 500 when functions fails', (t) => {
   t.plan(4)
 
   const auth = function (val) {
@@ -327,7 +327,7 @@ test('hook  rejects with 500 when functions fails', (t) => {
   })
 })
 
-test('hook  rejects with 500 when promise rejects', (t) => {
+test('hook rejects with 500 when promise rejects', (t) => {
   t.plan(4)
 
   const auth = function (val) {
@@ -360,7 +360,7 @@ test('hook  rejects with 500 when promise rejects', (t) => {
   })
 })
 
-test('hook  rejects with 500 when functions returns non-boolean', (t) => {
+test('hook rejects with 500 when functions returns non-boolean', (t) => {
   t.plan(4)
 
   const auth = function (val) {
@@ -393,7 +393,7 @@ test('hook  rejects with 500 when functions returns non-boolean', (t) => {
   })
 })
 
-test('hook  rejects with 500 when promise resolves to non-boolean', (t) => {
+test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
   t.plan(4)
 
   const auth = function (val) {

@@ -46,12 +46,12 @@ sent to the client (optional)
 `application/json`, then the `contentType` property must be set (optional)
 * `bearerType`: string specifying the Bearer string (optional)
 * `function auth (key, req) {}` : this function will test if `key` is a valid token.
-   The function must return literal `true` if the key is accepted or literal `false`
-   if rejected. The function may return also a promise that resolves to one of this
-   values. If the function returns or resolves to another value, rejects or throws 
-   it will send an HTTP status 500. `req` will contain the request object. If `auth`
-   is a function, `keys` will be ignored. If `auth` is not a function or undefined,
-   `keys` will be used.
+   The function must return a literal `true` if the key is accepted or a literal
+   `false` if rejected. The function may return also a promise that resolves to
+   one of these values. If the function returns or resolves to any other value,
+   rejects, or throws a HTTP status of `500` will be sent. `req` is the Fastify
+   request object. If `auth` is a function, `keys` will be ignored. If `auth` is
+   not a function, or `undefined`, `keys` will be used.
 
 The default configuration object is:
 
