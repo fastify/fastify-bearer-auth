@@ -146,3 +146,282 @@ test('hook accepts correct header with extra padding', (t) => {
     t.pass()
   })
 })
+
+test('hook accepts correct header with auth function (promise)', (t) => {
+  t.plan(2)
+  const auth = function (val) {
+    t.equal(val, key, 'wrong argument')
+    return Promise.resolve(true)
+  }
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer ${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send: send
+  }
+
+  function send (body) {
+    t.fail('should not happen')
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.pass()
+  })
+})
+
+test('hook accepts correct header with auth function (non-promise)', (t) => {
+  t.plan(2)
+  const auth = function (val) {
+    t.equal(val, key, 'wrong argument')
+    return true
+  }
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer ${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send: send
+  }
+
+  function send (body) {
+    t.fail('should not happen')
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.pass()
+  })
+})
+
+test('hook rejects wrong token with keys', (t) => {
+  t.plan(2)
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdedfg` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = plugin(keys)
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook rejects wrong token with auth function', (t) => {
+  t.plan(5)
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdefg` }
+    }
+  }
+
+  const auth = function (val, req) {
+    t.equal(req, request)
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return false
+  }
+
+  const response = {
+    code: (status) => {
+      t.equal(401, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook rejects wrong token with function (resolved promise)', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return Promise.resolve(false)
+  }
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdefg` }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(401, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook  rejects with 500 when functions fails', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    throw Error('failing')
+  }
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdefg` }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /failing/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook  rejects with 500 when promise rejects', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return Promise.reject(Error('failing'))
+  }
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdefg` }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /failing/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook  rejects with 500 when functions returns non-boolean', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return 'foobar'
+  }
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdefg` }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /internal server error/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook  rejects with 500 when promise resolves to non-boolean', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return Promise.resolve('abcde')
+  }
+
+  const request = {
+    log: { error: noop },
+    req: {
+      headers: { authorization: `bearer abcdefg` }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /internal server error/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
