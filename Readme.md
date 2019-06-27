@@ -18,7 +18,7 @@ const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
 fastify.register(bearerAuthPlugin, {keys})
 fastify.get('/foo', (req, reply) => {
-  reply({authenticated: true})
+  reply.send({authenticated: true})
 })
 
 fastify.listen({port: 8000}, (err) => {
