@@ -18,7 +18,7 @@ function factory (options) {
   const { keys, errorResponse, contentType, bearerType, auth } = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
-    const header = fastifyReq.req.headers['authorization']
+    const header = fastifyReq.req.headers.authorization
     if (!header) {
       const noHeaderError = Error('missing authorization header')
       fastifyReq.log.error('unauthorized: %s', noHeaderError.message)
