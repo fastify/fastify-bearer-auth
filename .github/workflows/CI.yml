@@ -1,0 +1,25 @@
+name: CI workflow
+on: [push, pull_request]
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '10', '8', '6' ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+  
+      - name: Install
+        run: npm install
+
+      - name: Lint
+        run: npm run lint-ci
+
+      - name: Test
+        run: npm run test-ci

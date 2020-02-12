@@ -1,5 +1,7 @@
 # fastify-bearer-auth
 
+![](https://github.com/fastify/fastify-bearer-auth/workflows/CI%20workflow/badge.svg)
+
 [![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-bearer-auth.svg)](https://greenkeeper.io/)
 
 *fastify-bearer-auth* provides a simple request hook for the [Fastify][fastify]
