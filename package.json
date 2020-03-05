@@ -37,10 +37,5 @@
   "dependencies": {
     "fastify-plugin": "^1.2.1",
     "secure-compare": "^3.0.1"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "tap"
-    ]
   }
 }
