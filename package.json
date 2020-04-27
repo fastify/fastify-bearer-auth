@@ -3,8 +3,9 @@
   "version": "4.2.0",
   "description": "An authentication plugin for Fastify",
   "main": "plugin.js",
+  "types": "plugin.d.ts",
   "scripts": {
-    "test": "tap \"test/**/*.test.js\"",
+    "test": "tap \"test/**/*.test.js\" && tsd",
     "test-ci": "tap --cov \"test/**/*.test.js\"",
     "lint": "standard | snazzy",
     "lint-ci": "standard"
@@ -28,19 +29,18 @@
   },
   "homepage": "https://github.com/fastify/fastify-bearer-auth#readme",
   "devDependencies": {
-    "fastify": "^2.0.0",
+    "fastify": "^3.0.0-alpha.1",
     "pre-commit": "^1.2.2",
     "snazzy": "^8.0.0",
     "standard": "^14.0.2",
     "tap": "^12.6.5"
   },
   "dependencies": {
-    "fastify-plugin": "^1.2.1",
-    "secure-compare": "^3.0.1"
+    "fastify-plugin": "^2.0.0",
+    "secure-compare": "^3.0.1",
+    "tsd": "^0.11.0"
   },
-  "greenkeeper": {
-    "ignore": [
-      "tap"
-    ]
+  "tsd": {
+    "directory": "test"
   }
 }
