@@ -33,12 +33,12 @@
     "pre-commit": "^1.2.2",
     "snazzy": "^8.0.0",
     "standard": "^14.0.2",
-    "tap": "^12.6.5"
+    "tap": "^12.6.5",
+    "tsd": "^0.11.0"
   },
   "dependencies": {
     "fastify-plugin": "^2.0.0",
-    "secure-compare": "^3.0.1",
-    "tsd": "^0.11.0"
+    "secure-compare": "^3.0.1"
   },
   "tsd": {
     "directory": "test"
