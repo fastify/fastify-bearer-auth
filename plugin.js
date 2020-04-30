@@ -86,7 +86,7 @@ function plugin (fastify, options, next) {
 }
 
 module.exports = fp(plugin, {
-  fastify: '<=3.0.0',
+  fastify: '3.x',
   name: 'fastify-bearer-auth'
 })
 module.exports.internals = { factory }
