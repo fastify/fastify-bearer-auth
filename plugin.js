@@ -1,7 +1,7 @@
 'use strict'
 
+const crypto = require('crypto')
 const fp = require('fastify-plugin')
-const compare = require('secure-compare')
 
 function factory (options) {
   const defaultOptions = {
@@ -78,6 +78,13 @@ function factory (options) {
 
 function authenticate (keys, key) {
   return keys.findIndex((a) => compare(a, key)) !== -1
+}
+
+function compare (a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false
+  if (a.length !== b.length) return false
+  // constant-time comparison to prevent timing attacks
+  return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b))
 }
 
 function plugin (fastify, options, next) {
