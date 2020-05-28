@@ -37,8 +37,7 @@
     "tsd": "^0.11.0"
   },
   "dependencies": {
-    "fastify-plugin": "^2.0.0",
-    "secure-compare": "^3.0.1"
+    "fastify-plugin": "^2.0.0"
   },
   "tsd": {
     "directory": "test",
