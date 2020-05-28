@@ -80,11 +80,14 @@ function authenticate (keys, key) {
   return keys.findIndex((a) => compare(a, key)) !== -1
 }
 
+// perform constant-time comparison to prevent timing attacks
 function compare (a, b) {
-  if (typeof a !== 'string' || typeof b !== 'string') return false
-  if (a.length !== b.length) return false
-  // constant-time comparison to prevent timing attacks
-  return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b))
+  try {
+    // may throw if they have different length, can't convert to Buffer, etc...
+    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b))
+  } catch {
+    return false
+  }
 }
 
 function plugin (fastify, options, next) {
