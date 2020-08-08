@@ -1,6 +1,6 @@
 {
   "name": "fastify-bearer-auth",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "An authentication plugin for Fastify",
   "main": "plugin.js",
   "types": "plugin.d.ts",
