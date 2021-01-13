@@ -64,13 +64,13 @@ The default configuration object is:
       return {error: err.message}
     },
     auth: undefined
-  }
-  ```
+}
+```
 
-Internally, the plugin registers a standard *Fastify* [preHandler hook][prehook]
+Internally, the plugin registers a standard *Fastify* [preHandler hook][prehook],
 which will inspect the request's headers for an `authorization` header with the
 format `bearer key`. The `key` will be matched against the configured `keys`
-object via a [constant time alogrithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time) to prevent against [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the `authorization` header is missing,
+object via a [constant time algorithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time) to prevent against [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the `authorization` header is missing,
 malformed, or the `key` does not validate then a 401 response will be sent with
 a `{error: message}` body; no further request processing will be performed.
 
