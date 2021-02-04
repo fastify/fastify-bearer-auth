@@ -24,6 +24,23 @@ jobs:
       - name: Test
         run: npm run test-ci
 
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel: true
+          flag-name: run-${{ matrix.node-version }}-${{ matrix.os }}
+
+  coverage:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+
   automerge:
     needs: ci
     runs-on: ubuntu-latest

@@ -13,7 +13,7 @@ function factory (options) {
     contentType: undefined,
     bearerType: 'Bearer'
   }
-  const _options = Object.assign({}, defaultOptions, options || {})
+  const _options = { ...defaultOptions, ...options || {} }
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
   const { keys, errorResponse, contentType, bearerType, auth } = _options
 
