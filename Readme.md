@@ -1,6 +1,10 @@
 # fastify-bearer-auth
 
+[![npm version](https://img.shields.io/npm/v/fastify-bearer-auth)](https://www.npmjs.com/package/fastify-bearer-auth)
 ![](https://github.com/fastify/fastify-bearer-auth/workflows/CI%20workflow/badge.svg)
+[![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-bearer-auth/badge.svg)](https://snyk.io/test/github/fastify/fastify-bearer-auth)
+[![Coverage Status](https://coveralls.io/repos/github/fastify/fastify-bearer-auth/badge.svg?branch=master)](https://coveralls.io/github/fastify/fastify-bearer-auth?branch=master)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 *fastify-bearer-auth* provides a simple request hook for the [Fastify][fastify]
 web framework.
