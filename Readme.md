@@ -79,4 +79,4 @@ a `{error: message}` body; no further request processing will be performed.
 
 ## License
 
-[MIT License](http://jsumners.mit-license.org/)
+[MIT License](https://jsumners.mit-license.org/)
