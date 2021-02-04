@@ -51,9 +51,9 @@ sent to the client (optional)
 * `bearerType`: string specifying the Bearer string (optional)
 * `function auth (key, req) {}` : this function will test if `key` is a valid token.
    The function must return a literal `true` if the key is accepted or a literal
-   `false` if rejected. The function may return also a promise that resolves to
+   `false` if rejected. The function may also return a promise that resolves to
    one of these values. If the function returns or resolves to any other value,
-   rejects, or throws a HTTP status of `500` will be sent. `req` is the Fastify
+   rejects, or throws, a HTTP status of `500` will be sent. `req` is the Fastify
    request object. If `auth` is a function, `keys` will be ignored. If `auth` is
    not a function, or `undefined`, `keys` will be used.
 
