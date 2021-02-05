@@ -40,3 +40,11 @@ expectAssignable<{
 
 fastify().register(bearerAuth, pluginOptions)
 fastify().register(bearerAuth, pluginOptionsAuthPromise)
+
+fastify().get('/route', {
+	config: {
+		allowAnonymous: true,
+	}
+}, function handler(req, reply) {
+  reply.send(reply.context.config.allowAnonymous)
+})

@@ -29,42 +29,30 @@ fastify.register(async function allowAnonymousContext (childServer) {
   })
 })
 
-test('authenticated: missing header fails', (t) => {
+test('authenticated: missing header fails', async (t) => {
   t.plan(2)
-  fastify.inject({ method: 'GET', url: '/authenticated/default' }).then(response => {
-    t.strictEqual(response.statusCode, 401)
-    t.match(JSON.parse(response.body).error, /missing authorization header/)
-  }).catch(err => {
-    t.error(err)
-  })
+  const response = await fastify.inject({ method: 'GET', url: '/authenticated/default' })
+  t.strictEqual(response.statusCode, 401)
+  t.match(JSON.parse(response.body).error, /missing authorization header/)
 })
 
-test('authenticated: override', (t) => {
+test('authenticated: override', async (t) => {
   t.plan(2)
-  fastify.inject({ method: 'GET', url: '/authenticated/override' }).then(response => {
-    t.strictEqual(response.statusCode, 200)
-    t.deepEqual(JSON.parse(response.body), { hello: 'world' })
-  }).catch(err => {
-    t.error(err)
-  })
+  const response = await fastify.inject({ method: 'GET', url: '/authenticated/override' })
+  t.strictEqual(response.statusCode, 200)
+  t.deepEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
-test('allowAnonymous: missing header succeeds', (t) => {
+test('allowAnonymous: missing header succeeds', async (t) => {
   t.plan(2)
-  fastify.inject({ method: 'GET', url: '/allowAnonymous/default' }).then(response => {
-    t.strictEqual(response.statusCode, 200)
-    t.deepEqual(JSON.parse(response.body), { hello: 'world' })
-  }).catch(err => {
-    t.error(err)
-  })
+  const response = await fastify.inject({ method: 'GET', url: '/allowAnonymous/default' })
+  t.strictEqual(response.statusCode, 200)
+  t.deepEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
-test('allowAnonymous: override', (t) => {
+test('allowAnonymous: override', async (t) => {
   t.plan(2)
-  fastify.inject({ method: 'GET', url: '/allowAnonymous/override' }).then(response => {
-    t.strictEqual(response.statusCode, 401)
-    t.match(JSON.parse(response.body).error, /missing authorization header/)
-  }).catch(err => {
-    t.error(err)
-  })
+  const response = await fastify.inject({ method: 'GET', url: '/allowAnonymous/override' })
+  t.strictEqual(response.statusCode, 401)
+  t.match(JSON.parse(response.body).error, /missing authorization header/)
 })
