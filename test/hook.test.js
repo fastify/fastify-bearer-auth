@@ -15,6 +15,7 @@ test('hook rejects for missing header', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -38,6 +39,7 @@ test('hook rejects header without bearer prefix', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -61,6 +63,7 @@ test('hook rejects malformed header', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -84,6 +87,7 @@ test('hook accepts correct header', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -110,6 +114,7 @@ test('hook accepts correct header and alternate Bearer', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -134,6 +139,7 @@ test('hook accepts correct header with extra padding', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -161,6 +167,7 @@ test('hook accepts correct header with auth function (promise)', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -188,6 +195,7 @@ test('hook accepts correct header with auth function (non-promise)', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -212,6 +220,7 @@ test('hook rejects wrong token with keys', (t) => {
   }
   const response = {
     code: () => response,
+    context: {},
     send: send
   }
 
@@ -247,6 +256,7 @@ test('hook rejects wrong token with auth function', (t) => {
       t.equal(401, status)
       return response
     },
+    context: {},
     send: send
   }
 
@@ -280,6 +290,7 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
       t.equal(401, status)
       return response
     },
+    context: {},
     send: send
   }
 
@@ -313,6 +324,7 @@ test('hook rejects with 500 when functions fails', (t) => {
       t.equal(500, status)
       return response
     },
+    context: {},
     send: send
   }
 
@@ -346,6 +358,7 @@ test('hook rejects with 500 when promise rejects', (t) => {
       t.equal(500, status)
       return response
     },
+    context: {},
     send: send
   }
 
@@ -379,6 +392,7 @@ test('hook rejects with 500 when functions returns non-boolean', (t) => {
       t.equal(500, status)
       return response
     },
+    context: {},
     send: send
   }
 
@@ -412,6 +426,7 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
       t.equal(500, status)
       return response
     },
+    context: {},
     send: send
   }
 

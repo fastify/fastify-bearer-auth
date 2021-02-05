@@ -21,7 +21,10 @@ function factory (options) {
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
     const header = fastifyReq.raw.headers.authorization
     if (!header) {
-      if (allowAnonymous) {
+      // Allow the config to be overriden at the route level
+      const { allowAnonymous: routeAllowAnonymous = allowAnonymous } = fastifyRes.context.config || {}
+
+      if (routeAllowAnonymous) {
         return next()
       }
       const noHeaderError = Error('missing authorization header')
