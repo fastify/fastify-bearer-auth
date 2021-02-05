@@ -6,7 +6,8 @@ declare namespace fastifyBearerAuth {
 		auth?: (key: string, req: fastify.FastifyRequest) => boolean | Promise<boolean>,
 		errorResponse?: (err: Error) => { error: string },
 		contentType?: string,
-		bearerType?: string
+		bearerType?: string,
+		allowAnonymous?: true
 	}
 }
 

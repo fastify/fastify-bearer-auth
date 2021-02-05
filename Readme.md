@@ -56,6 +56,7 @@ sent to the client (optional)
    rejects, or throws, a HTTP status of `500` will be sent. `req` is the Fastify
    request object. If `auth` is a function, `keys` will be ignored. If `auth` is
    not a function, or `undefined`, `keys` will be used.
+* `allowAnonymous`: allow the reques to continue the chain if the header is not preset
 
 The default configuration object is:
 
@@ -63,6 +64,7 @@ The default configuration object is:
   {
     keys: new Set(),
     contentType: undefined,
+    allowAnonymous: false,
     bearerType: 'Bearer',
     errorResponse: (err) => {
       return {error: err.message}

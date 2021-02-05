@@ -7,7 +7,8 @@ const pluginOptions: FastifyBearerAuthOptions = {
 	auth: (key: string, req: FastifyRequest) => { return true },
 	errorResponse: (err: Error) => { return { error: err.message } },
 	contentType: '',
-	bearerType: ''
+	bearerType: '',
+	allowAnonymous: true
 }
 
 const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
@@ -15,7 +16,8 @@ const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
 	auth: (key: string, req: FastifyRequest) => { return Promise.resolve(true) },
 	errorResponse: (err: Error) => { return { error: err.message } },
 	contentType: '',
-	bearerType: ''
+	bearerType: '',
+	allowAnonymous: true
 }
 
 expectAssignable<{
@@ -23,7 +25,8 @@ expectAssignable<{
 	auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
 	errorResponse?: (err: Error) => { error: string },
 	contentType?: string,
-	bearerType?: string
+	bearerType?: string,
+	allowAnonymous?: true
 }>(pluginOptions)
 
 expectAssignable<{
@@ -31,7 +34,8 @@ expectAssignable<{
 	auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
 	errorResponse?: (err: Error) => { error: string },
 	contentType?: string,
-	bearerType?: string
+	bearerType?: string,
+	allowAnonymous?: true
 }>(pluginOptionsAuthPromise)
 
 fastify().register(bearerAuth, pluginOptions)

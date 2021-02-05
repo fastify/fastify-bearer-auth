@@ -10,16 +10,20 @@ function factory (options) {
     errorResponse (err) {
       return { error: err.message }
     },
+    allowAnonymous: false,
     contentType: undefined,
     bearerType: 'Bearer'
   }
   const _options = { ...defaultOptions, ...options || {} }
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
-  const { keys, errorResponse, contentType, bearerType, auth } = _options
+  const { keys, errorResponse, contentType, bearerType, auth, allowAnonymous } = _options
 
   function bearerAuthHook (fastifyReq, fastifyRes, next) {
     const header = fastifyReq.raw.headers.authorization
     if (!header) {
+      if (allowAnonymous) {
+        return next()
+      }
       const noHeaderError = Error('missing authorization header')
       fastifyReq.log.error('unauthorized: %s', noHeaderError.message)
       if (contentType) fastifyRes.header('content-type', contentType)
