@@ -83,7 +83,7 @@ a `{error: message}` body; no further request processing will be performed.
 [fplugin]: https://github.com/fastify/fastify/blob/master/docs/Plugins.md
 [prehook]: https://github.com/fastify/fastify/blob/master/docs/Hooks.md
 
-The authorization header can be ommited (anonymous access) if the `allowAnonymous` config option is set to true.
+The authorization header can be ommited (anonymous access) if the `allowAnonymous` config option is set to `true`.
 This can then be overriden per route to opt back into mandatory or optional authorization headers
 
 ```js
