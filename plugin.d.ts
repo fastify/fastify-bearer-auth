@@ -9,6 +9,12 @@ declare namespace fastifyBearerAuth {
 		bearerType?: string,
 		allowAnonymous?: true
 	}
+	
+	interface FastifyContext {
+		config: {
+			allowAnonymous?: boolean
+		}
+	}
 }
 
 declare const fastifyBearerAuth: fastify.FastifyPlugin<fastifyBearerAuth.FastifyBearerAuthOptions>
