@@ -83,7 +83,7 @@ a `{error: message}` body; no further request processing will be performed.
 [fplugin]: https://github.com/fastify/fastify/blob/master/docs/Plugins.md
 [prehook]: https://github.com/fastify/fastify/blob/master/docs/Hooks.md
 
-## Integration
+## Integration with `fastify-auth`
 
 This plugin can integrate with `fastify-auth`, you can follow the example below.
 
