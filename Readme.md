@@ -85,7 +85,7 @@ a `{error: message}` body; no further request processing will be performed.
 
 ## Integration with `fastify-auth`
 
-This plugin can integrate with `fastify-auth`, you can follow the example below.
+This plugin can integrate with `fastify-auth` by following this example:
 
 ```JS
 const fastify = require('fastify')()
