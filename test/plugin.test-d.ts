@@ -1,13 +1,14 @@
 import fastify, { FastifyRequest } from 'fastify'
-import bearerAuth, { FastifyBearerAuthOptions } from '../plugin'
 import { expectAssignable } from 'tsd'
+import bearerAuth, { FastifyBearerAuthOptions } from '../plugin'
 
 const pluginOptions: FastifyBearerAuthOptions = {
 	keys: new Set(['foo']),
 	auth: (key: string, req: FastifyRequest) => { return true },
 	errorResponse: (err: Error) => { return { error: err.message } },
 	contentType: '',
-	bearerType: ''
+	bearerType: '',
+  addHook: false
 }
 
 const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
