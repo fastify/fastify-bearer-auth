@@ -95,7 +95,7 @@ function plugin (fastify, options, done) {
   fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
   fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
 
-  if (options.addHook) {
+  if (options.addHook === true) {
     fastify.addHook('onRequest', verifyBearerAuthFactory(options))
   }
 
