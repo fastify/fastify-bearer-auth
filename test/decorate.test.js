@@ -5,7 +5,7 @@ const test = tap.test
 const fastify = require('fastify')()
 const plugin = require('../')
 
-fastify.register(plugin, { legacy: true, keys: new Set(['123456']) })
+fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
 
 test('verifyBearerAuth', (t) => {
   t.plan(1)
