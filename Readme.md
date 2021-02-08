@@ -56,7 +56,9 @@ sent to the client (optional)
    rejects, or throws, a HTTP status of `500` will be sent. `req` is the Fastify
    request object. If `auth` is a function, `keys` will be ignored. If `auth` is
    not a function, or `undefined`, `keys` will be used.
-* `addHook`: If `false`, this plugin will not register `onRequest` hook automatically.
+* `addHook`: If `false`, this plugin will not register `onRequest` hook automatically,
+   instead it provide two decorations `fastify.verifyBearerAuth` and
+   `fastify.verifyBearerAuthFactory` for you.
 
 The default configuration object is:
 
