@@ -9,6 +9,16 @@ declare namespace fastifyBearerAuth {
     bearerType?: string,
     addHook?: boolean
   }
+
+  export type verifyBearerAuth = (request: fastify.FastifyRequest, reply: fastify.FastifyReply, done: (err?: Error) => void) => void
+  export type verifyBearerAuthFactory = (options: fastifyBearerAuth.FastifyBearerAuthOptions) => verifyBearerAuth
+}
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    verifyBearerAuthFactory?: fastifyBearerAuth.verifyBearerAuthFactory
+    verifyBearerAuth?: fastifyBearerAuth.verifyBearerAuth
+  }
 }
 
 declare const fastifyBearerAuth: fastify.FastifyPlugin<fastifyBearerAuth.FastifyBearerAuthOptions>
