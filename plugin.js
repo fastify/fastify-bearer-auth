@@ -90,10 +90,12 @@ function compare (a, b) {
 }
 
 function plugin (fastify, options, done) {
+  options = Object.assign({ addHook: true }, options)
+
   fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
   fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
 
-  if (options.legacy) {
+  if (options.addHook) {
     fastify.addHook('onRequest', verifyBearerAuthFactory(options))
   }
 

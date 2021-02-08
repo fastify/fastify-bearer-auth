@@ -56,7 +56,7 @@ sent to the client (optional)
    rejects, or throws, a HTTP status of `500` will be sent. `req` is the Fastify
    request object. If `auth` is a function, `keys` will be ignored. If `auth` is
    not a function, or `undefined`, `keys` will be used.
-* `legacy`: turn on legacy mode to add bearer auth for `onRequest` hook.
+* `addHook`: If `false`, this plugin will not register `onRequest` hook automatically.
 
 The default configuration object is:
 
@@ -69,7 +69,7 @@ The default configuration object is:
       return {error: err.message}
     },
     auth: undefined,
-    legacy: undefined
+    addHook: true
 }
 ```
 
@@ -88,6 +88,12 @@ a `{error: message}` body; no further request processing will be performed.
 This plugin can integrate with `fastify-auth`, you can follow the example below.
 
 ```JS
+const fastify = require('fastify')()
+const bearerAuthPlugin = require('fastify-bearer-auth')
+const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
+
+fastify.register(bearerAuthPlugin, { addHook: false, keys})
+
 fastify.route({
   method: 'GET',
   url: '/multiauth',

@@ -5,7 +5,7 @@ const test = tap.test
 const fastify = require('fastify')()
 const plugin = require('../')
 
-fastify.register(plugin, { legacy: true, keys: new Set(['123456']) })
+fastify.register(plugin, { keys: new Set(['123456']) })
 
 fastify.get('/test', (req, res) => {
   res.send({ hello: 'world' })
@@ -54,8 +54,10 @@ test('missing header route fails correctly', (t) => {
 })
 
 test('integration with fastify-auth', async (t) => {
+  t.plan(3)
+
   const fastify = require('fastify')()
-  await fastify.register(plugin, { keys: new Set(['123456']) })
+  await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
   await fastify.decorate('allowAnonymous', function (request, _, done) {
     if (!request.headers.authorization) {
       return done()
@@ -78,7 +80,7 @@ test('integration with fastify-auth', async (t) => {
 
   await fastify.ready()
 
-  test('anonymous should pass', async (t) => {
+  t.test('anonymous should pass', async (t) => {
     t.plan(2)
     try {
       const res = await fastify.inject({ method: 'GET', url: '/anonymous' })
@@ -89,7 +91,7 @@ test('integration with fastify-auth', async (t) => {
     }
   })
 
-  test('bearer auth should pass', async (t) => {
+  t.test('bearer auth should pass', async (t) => {
     t.plan(2)
     try {
       const res = await fastify.inject({
@@ -106,7 +108,7 @@ test('integration with fastify-auth', async (t) => {
     }
   })
 
-  test('bearer auth should fail', async (t) => {
+  t.test('bearer auth should fail', async (t) => {
     t.plan(2)
     try {
       const res = await fastify.inject({
