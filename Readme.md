@@ -87,7 +87,7 @@ a `{error: message}` body; no further request processing will be performed.
 
 This plugin can integrate with `fastify-auth` by following this example:
 
-```JS
+```js
 const fastify = require('fastify')()
 const bearerAuthPlugin = require('fastify-bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
