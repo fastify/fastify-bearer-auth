@@ -23,8 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
   
-      - name: Install
-        run: npm install
+      - name: Install Dependencies
+        run: npm install --ignore-scripts
 
       - name: Lint
         run: npm run lint-ci
