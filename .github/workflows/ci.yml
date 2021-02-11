@@ -1,11 +1,13 @@
 name: CI workflow
 on:
-    push:
-        paths-ignore:
-            - "*.md"
-    pull_request:
-        paths-ignore:
-            - "*.md"
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
 jobs:
   ci:
     name: CI
