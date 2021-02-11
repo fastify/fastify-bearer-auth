@@ -8,7 +8,7 @@
     "lint": "standard | snazzy",
     "lint-ci": "standard",
     "test": "tap \"test/**/*.test.js\" && tsd",
-    "test-ci": "tap \"test/**/*.test.js\" --coverage-report=lcovonly"
+    "test-ci": "tap \"test/**/*.test.js\" --coverage-report=lcovonly && tsd"
   },
   "precommit": [
     "lint",
