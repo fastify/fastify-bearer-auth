@@ -1,11 +1,13 @@
 name: CI workflow
 on:
-    push:
-        paths-ignore:
-            - "*.md"
-    pull_request:
-        paths-ignore:
-            - "*.md"
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
 jobs:
   ci:
     name: CI
@@ -15,23 +17,18 @@ jobs:
         node-version: [ '10', '12', '14' ]
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup node
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node }}
-  
-      - name: Install
-        run: npm install
-
+      - name: Install Dependencies
+        run: npm install --ignore-scripts
       - name: Lint
         run: npm run lint-ci
-
-      - name: Test
+      - name: Tests
         run: npm run test-ci
-
       - name: Coveralls Parallel
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.github_token }}
           parallel: true
@@ -42,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
