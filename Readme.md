@@ -56,6 +56,9 @@ sent to the client (optional)
    rejects, or throws, a HTTP status of `500` will be sent. `req` is the Fastify
    request object. If `auth` is a function, `keys` will be ignored. If `auth` is
    not a function, or `undefined`, `keys` will be used.
+* `addHook`: If `false`, this plugin will not register `onRequest` hook automatically,
+   instead it provide two decorations `fastify.verifyBearerAuth` and
+   `fastify.verifyBearerAuthFactory` for you.
 
 The default configuration object is:
 
@@ -67,7 +70,8 @@ The default configuration object is:
     errorResponse: (err) => {
       return {error: err.message}
     },
-    auth: undefined
+    auth: undefined,
+    addHook: true
 }
 ```
 
@@ -80,6 +84,30 @@ a `{error: message}` body; no further request processing will be performed.
 
 [fplugin]: https://github.com/fastify/fastify/blob/master/docs/Plugins.md
 [prehook]: https://github.com/fastify/fastify/blob/master/docs/Hooks.md
+
+## Integration with `fastify-auth`
+
+This plugin can integrate with `fastify-auth` by following this example:
+
+```js
+const fastify = require('fastify')()
+const bearerAuthPlugin = require('fastify-bearer-auth')
+const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
+
+fastify.register(bearerAuthPlugin, { addHook: false, keys})
+
+fastify.route({
+  method: 'GET',
+  url: '/multiauth',
+  preHandler: fastify.auth([
+    fastify.allowAnonymous,
+    fastify.verifyBearerAuth
+  ]),
+  handler: function (_, reply) {
+    reply.send({ hello: 'world' })
+  }
+})
+```
 
 ## License
 

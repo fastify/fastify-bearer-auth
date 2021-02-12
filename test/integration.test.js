@@ -52,3 +52,76 @@ test('missing header route fails correctly', (t) => {
     t.error(err)
   })
 })
+
+test('integration with fastify-auth', async (t) => {
+  t.plan(3)
+
+  const fastify = require('fastify')()
+  await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
+  await fastify.decorate('allowAnonymous', function (request, _, done) {
+    if (!request.headers.authorization) {
+      return done()
+    }
+    return done(new Error('not anonymous'))
+  })
+  await fastify.register(require('fastify-auth'))
+
+  fastify.route({
+    method: 'GET',
+    url: '/anonymous',
+    preHandler: fastify.auth([
+      fastify.allowAnonymous,
+      fastify.verifyBearerAuth
+    ]),
+    handler: function (_, reply) {
+      reply.send({ hello: 'world' })
+    }
+  })
+
+  await fastify.ready()
+
+  t.test('anonymous should pass', async (t) => {
+    t.plan(2)
+    try {
+      const res = await fastify.inject({ method: 'GET', url: '/anonymous' })
+      t.strictEqual(res.statusCode, 200)
+      t.match(JSON.parse(res.body).hello, 'world')
+    } catch (err) {
+      t.error(err)
+    }
+  })
+
+  t.test('bearer auth should pass', async (t) => {
+    t.plan(2)
+    try {
+      const res = await fastify.inject({
+        method: 'GET',
+        url: '/anonymous',
+        headers: {
+          authorization: 'Bearer 123456'
+        }
+      })
+      t.strictEqual(res.statusCode, 200)
+      t.match(JSON.parse(res.body).hello, 'world')
+    } catch (err) {
+      t.error(err)
+    }
+  })
+
+  t.test('bearer auth should fail', async (t) => {
+    t.plan(2)
+    try {
+      const res = await fastify.inject({
+        method: 'GET',
+        url: '/anonymous',
+        headers: {
+          authorization: 'Bearer fail'
+        }
+      })
+      t.strictEqual(res.statusCode, 401)
+      t.match(JSON.parse(res.body).error, /invalid authorization header/)
+    } catch (err) {
+      t.error(err)
+    }
+  })
+})
