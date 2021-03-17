@@ -1,4 +1,5 @@
-name: CI workflow
+name: CI
+
 on:
   push:
     paths-ignore:
@@ -8,25 +9,36 @@ on:
     paths-ignore:
       - 'docs/**'
       - '*.md'
+
 jobs:
-  ci:
-    name: CI
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
-        node-version: [ '10', '12', '14' ]
+        node-version: [10.x, 12.x, 14.x]
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node
+
+      - name: Use Node.js
         uses: actions/setup-node@v2.1.5
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node-version }}
+
       - name: Install Dependencies
-        run: npm install --ignore-scripts
+        run: |
+          npm install --ignore-scripts
+
       - name: Lint
-        run: npm run lint-ci
-      - name: Tests
-        run: npm run test-ci
+        run: |
+          npm run lint:ci
+
+      - name: Run Tests
+        run: |
+          npm run test:ci
+
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@v1.1.2
         with:
@@ -35,7 +47,7 @@ jobs:
           flag-name: run-${{ matrix.node-version }}-${{ matrix.os }}
 
   coverage:
-    needs: ci
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
@@ -45,7 +57,7 @@ jobs:
           parallel-finished: true
 
   automerge:
-    needs: ci
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: fastify/github-action-merge-dependabot@v2.0.0
