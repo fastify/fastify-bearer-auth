@@ -20,8 +20,8 @@ test('success route succeeds', (t) => {
       authorization: 'Bearer 123456'
     }
   }).then(response => {
-    t.strictEqual(response.statusCode, 200)
-    t.deepEqual(JSON.parse(response.body), { hello: 'world' })
+    t.equal(response.statusCode, 200)
+    t.same(JSON.parse(response.body), { hello: 'world' })
   }).catch(err => {
     t.error(err)
   })
@@ -36,7 +36,7 @@ test('invalid key route fails correctly', (t) => {
       authorization: 'Bearer 987654'
     }
   }).then(response => {
-    t.strictEqual(response.statusCode, 401)
+    t.equal(response.statusCode, 401)
     t.match(JSON.parse(response.body).error, /invalid authorization header/)
   }).catch(err => {
     t.error(err)
@@ -46,7 +46,7 @@ test('invalid key route fails correctly', (t) => {
 test('missing header route fails correctly', (t) => {
   t.plan(2)
   fastify.inject({ method: 'GET', url: '/test' }).then(response => {
-    t.strictEqual(response.statusCode, 401)
+    t.equal(response.statusCode, 401)
     t.match(JSON.parse(response.body).error, /missing authorization header/)
   }).catch(err => {
     t.error(err)
@@ -84,7 +84,7 @@ test('integration with fastify-auth', async (t) => {
     t.plan(2)
     try {
       const res = await fastify.inject({ method: 'GET', url: '/anonymous' })
-      t.strictEqual(res.statusCode, 200)
+      t.equal(res.statusCode, 200)
       t.match(JSON.parse(res.body).hello, 'world')
     } catch (err) {
       t.error(err)
@@ -101,7 +101,7 @@ test('integration with fastify-auth', async (t) => {
           authorization: 'Bearer 123456'
         }
       })
-      t.strictEqual(res.statusCode, 200)
+      t.equal(res.statusCode, 200)
       t.match(JSON.parse(res.body).hello, 'world')
     } catch (err) {
       t.error(err)
@@ -118,7 +118,7 @@ test('integration with fastify-auth', async (t) => {
           authorization: 'Bearer fail'
         }
       })
-      t.strictEqual(res.statusCode, 401)
+      t.equal(res.statusCode, 401)
       t.match(JSON.parse(res.body).error, /invalid authorization header/)
     } catch (err) {
       t.error(err)
