@@ -27,6 +27,34 @@ test('hook rejects for missing header', (t) => {
   hook(request, response)
 })
 
+test('hook rejects for missing header with custom content type', (t) => {
+  t.plan(6)
+
+  const CUSTOM_CONTENT_TYPE = 'text/fastify'
+  const request = {
+    log: { error: noop },
+    raw: { headers: {} }
+  }
+  const response = {
+    code: () => response,
+    header: header,
+    send: send
+  }
+  function header (key, value) {
+    t.ok(key)
+    t.ok(value)
+    t.equal(key, 'content-type')
+    t.equal(value, CUSTOM_CONTENT_TYPE)
+  }
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /missing authorization header/)
+  }
+
+  const hook = plugin({ contentType: CUSTOM_CONTENT_TYPE })
+  hook(request, response)
+})
+
 test('hook rejects header without bearer prefix', (t) => {
   t.plan(2)
 
@@ -226,6 +254,36 @@ test('hook rejects wrong token with keys', (t) => {
   })
 })
 
+test('hook rejects wrong token with custom content type', (t) => {
+  t.plan(6)
+
+  const CUSTOM_CONTENT_TYPE = 'text/fastify'
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: 'bearer abcdefg' }
+    }
+  }
+  const response = {
+    code: () => response,
+    header: header,
+    send: send
+  }
+  function header (key, value) {
+    t.ok(key)
+    t.ok(value)
+    t.equal(key, 'content-type')
+    t.equal(value, CUSTOM_CONTENT_TYPE)
+  }
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = plugin({ ...keys, contentType: CUSTOM_CONTENT_TYPE })
+  hook(request, response)
+})
+
 test('hook rejects wrong token with auth function', (t) => {
   t.plan(5)
 
@@ -357,6 +415,70 @@ test('hook rejects with 500 when promise rejects', (t) => {
   const hook = plugin({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
+  })
+})
+
+test('hook rejects with 500 when promise rejects with non Error', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return Promise.reject('failing') // eslint-disable-line
+  }
+
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: 'bearer abcdefg' }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /failing/)
+  }
+
+  const hook = plugin({ auth })
+  hook(request, response, () => {
+    t.fail('should not accept')
+  })
+})
+
+test('hook returns proper error for valid key but failing callback', (t) => {
+  t.plan(4)
+
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: `bearer ${key}` }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    },
+    send: send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /foo!/)
+  }
+
+  const hook = plugin(keys)
+  hook(request, response, (err) => {
+    if (err) {
+      t.pass(err)
+    }
+    throw new Error('foo!')
   })
 })
 
