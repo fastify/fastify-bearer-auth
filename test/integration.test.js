@@ -82,47 +82,35 @@ test('integration with fastify-auth', async (t) => {
 
   t.test('anonymous should pass', async (t) => {
     t.plan(2)
-    try {
-      const res = await fastify.inject({ method: 'GET', url: '/anonymous' })
-      t.equal(res.statusCode, 200)
-      t.match(JSON.parse(res.body).hello, 'world')
-    } catch (err) {
-      t.error(err)
-    }
+    const res = await fastify.inject({ method: 'GET', url: '/anonymous' })
+    t.equal(res.statusCode, 200)
+    t.match(JSON.parse(res.body).hello, 'world')
   })
 
   t.test('bearer auth should pass', async (t) => {
     t.plan(2)
-    try {
-      const res = await fastify.inject({
-        method: 'GET',
-        url: '/anonymous',
-        headers: {
-          authorization: 'Bearer 123456'
-        }
-      })
-      t.equal(res.statusCode, 200)
-      t.match(JSON.parse(res.body).hello, 'world')
-    } catch (err) {
-      t.error(err)
-    }
+    const res = await fastify.inject({
+      method: 'GET',
+      url: '/anonymous',
+      headers: {
+        authorization: 'Bearer 123456'
+      }
+    })
+    t.equal(res.statusCode, 200)
+    t.match(JSON.parse(res.body).hello, 'world')
   })
 
   t.test('bearer auth should fail, so fastify.auth fails', async (t) => {
     t.plan(2)
-    try {
-      const res = await fastify.inject({
-        method: 'GET',
-        url: '/anonymous',
-        headers: {
-          authorization: 'Bearer fail'
-        }
-      })
-      t.equal(res.statusCode, 401)
-      t.match(JSON.parse(res.body).error, /Unauthorized/)
-    } catch (err) {
-      t.error(err)
-    }
+    const res = await fastify.inject({
+      method: 'GET',
+      url: '/anonymous',
+      headers: {
+        authorization: 'Bearer fail'
+      }
+    })
+    t.equal(res.statusCode, 401)
+    t.match(JSON.parse(res.body).error, /Unauthorized/)
   })
 })
 
@@ -152,50 +140,38 @@ test('integration with fastify-auth; not the last auth option', async (t) => {
 
   t.test('bearer auth should pass so fastify.auth should pass', async (t) => {
     t.plan(2)
-    try {
-      const res = await fastify.inject({
-        method: 'GET',
-        url: '/bearer-first',
-        headers: {
-          authorization: 'Bearer 123456'
-        }
-      })
-      t.equal(res.statusCode, 200)
-      t.match(JSON.parse(res.body).hello, 'world')
-    } catch (err) {
-      t.error(err)
-    }
+    const res = await fastify.inject({
+      method: 'GET',
+      url: '/bearer-first',
+      headers: {
+        authorization: 'Bearer 123456'
+      }
+    })
+    t.equal(res.statusCode, 200)
+    t.match(JSON.parse(res.body).hello, 'world')
   })
 
   t.test('bearer should fail but fastify.auth should pass', async (t) => {
     t.plan(2)
-    try {
-      const res = await fastify.inject({
-        method: 'GET',
-        url: '/bearer-first',
-        headers: {
-          authorization: 'Bearer fail'
-        }
-      })
-      t.equal(res.statusCode, 200)
-      t.match(JSON.parse(res.body).hello, 'world')
-    } catch (err) {
-      t.error(err)
-    }
+    const res = await fastify.inject({
+      method: 'GET',
+      url: '/bearer-first',
+      headers: {
+        authorization: 'Bearer fail'
+      }
+    })
+    t.equal(res.statusCode, 200)
+    t.match(JSON.parse(res.body).hello, 'world')
   })
 
   t.test('bearer should fail but fastify.auth should pass', async (t) => {
     t.plan(2)
-    try {
-      const res = await fastify.inject({
-        method: 'GET',
-        url: '/bearer-first',
-        headers: {}
-      })
-      t.equal(res.statusCode, 200)
-      t.match(JSON.parse(res.body).hello, 'world')
-    } catch (err) {
-      t.error(err)
-    }
+    const res = await fastify.inject({
+      method: 'GET',
+      url: '/bearer-first',
+      headers: {}
+    })
+    t.equal(res.statusCode, 200)
+    t.match(JSON.parse(res.body).hello, 'world')
   })
 })
