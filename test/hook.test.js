@@ -547,3 +547,59 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
     t.fail('should not accept')
   })
 })
+
+test('hook rejects with 500 when functions returns non-boolean (addHook: false)', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return 'foobar'
+  }
+
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: 'bearer abcdefg' }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    }
+  }
+
+  const hook = plugin({ auth, addHook: false })
+  hook(request, response, (err) => {
+    t.ok(err)
+    t.match(err.message, /internal server error/)
+  })
+})
+
+test('hook rejects with 500 when promise rejects (addHook: false)', (t) => {
+  t.plan(4)
+
+  const auth = function (val) {
+    t.equal(val, 'abcdefg', 'wrong argument')
+    return Promise.reject(Error('failing'))
+  }
+
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: 'bearer abcdefg' }
+    }
+  }
+  const response = {
+    code: (status) => {
+      t.equal(500, status)
+      return response
+    }
+  }
+
+  const hook = plugin({ auth, addHook: false })
+  hook(request, response, (err) => {
+    t.ok(err)
+    t.match(err.message, /failing/)
+  })
+})

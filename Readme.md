@@ -109,6 +109,11 @@ fastify.route({
 })
 ```
 
+By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
+immediately replying on error (`reply.send(someError)`), it calls `done(someError)`. This
+will allow `fastify.auth` to take back control and try to authenticate the request with the
+next hook in the list. If `verifyBearerAuth` is the last hook in the list, `fastify.auth`
+will reply with `Unauthorized`.
 ## License
 
 [MIT License](https://jsumners.mit-license.org/)
