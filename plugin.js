@@ -16,7 +16,7 @@ const defaultOptions = {
 function verifyBearerAuthFactory (options) {
   const _options = Object.assign({}, defaultOptions, options)
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
-  const { keys, errorResponse, contentType, bearerType, auth } = _options
+  const { keys, errorResponse, contentType, bearerType, auth, addHook = true } = _options
 
   return function verifyBearerAuth (request, reply, done) {
     const header = request.raw.headers.authorization
@@ -24,7 +24,12 @@ function verifyBearerAuthFactory (options) {
       const noHeaderError = Error('missing authorization header')
       request.log.error('unauthorized: %s', noHeaderError.message)
       if (contentType) reply.header('content-type', contentType)
-      reply.code(401).send(errorResponse(noHeaderError))
+      reply.code(401)
+      if (!addHook) {
+        done(noHeaderError)
+        return
+      }
+      reply.send(errorResponse(noHeaderError))
       return
     }
 
@@ -56,7 +61,9 @@ function verifyBearerAuthFactory (options) {
       if (val === false) {
         request.log.error('invalid authorization header: `%s`', header)
         if (contentType) reply.header('content-type', contentType)
-        reply.code(401).send(errorResponse(invalidKeyError))
+        reply.code(401)
+        if (!addHook) return done(invalidKeyError)
+        reply.send(errorResponse(invalidKeyError))
         return
       }
       if (val === true) {
@@ -68,9 +75,15 @@ function verifyBearerAuthFactory (options) {
         }
         return
       }
-      reply.code(500).send(errorResponse(new Error('internal server error')))
+      const retErr = new Error('internal server error')
+      reply.code(500)
+      if (!addHook) return done(retErr)
+      reply.send(errorResponse(retErr))
     }).catch((err) => {
-      reply.code(500).send(errorResponse(err instanceof Error ? err : Error(String(err))))
+      const retErr = err instanceof Error ? err : Error(String(err))
+      reply.code(500)
+      if (!addHook) return done(retErr)
+      reply.send(errorResponse(retErr))
     })
   }
 }
