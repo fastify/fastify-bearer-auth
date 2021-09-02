@@ -95,7 +95,7 @@ const auth = require('fastify-auth')
 const bearerAuthPlugin = require('fastify-bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
-const server = async function () {
+async function server() {
 
   await fastify
     .register(auth)
@@ -119,13 +119,7 @@ const server = async function () {
     }
   })
 
-  fastify.listen({port: 8000}, (err) => {
-    if (err) {
-      fastify.log.error(err.message)
-      process.exit(1)
-    }
-    fastify.log.info('http://127.0.0.1:8000/foo')
-  })
+  await fastify.listen({port: 8000})
 }
 
 server()
