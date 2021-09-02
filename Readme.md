@@ -91,22 +91,38 @@ This plugin can integrate with `fastify-auth` by following this example:
 
 ```js
 const fastify = require('fastify')()
+const auth = require('fastify-auth')
 const bearerAuthPlugin = require('fastify-bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
-fastify.register(bearerAuthPlugin, { addHook: false, keys})
+async function server() {
 
-fastify.route({
-  method: 'GET',
-  url: '/multiauth',
-  preHandler: fastify.auth([
-    fastify.allowAnonymous,
-    fastify.verifyBearerAuth
-  ]),
-  handler: function (_, reply) {
-    reply.send({ hello: 'world' })
-  }
-})
+  await fastify
+    .register(auth)
+    .register(bearerAuthPlugin, { addHook: false, keys})
+    .decorate('allowAnonymous', function (req, reply, done) {
+      if (req.headers.authorization) {
+        return done(Error('not anonymous'))
+      }
+      return done()
+    })
+
+  fastify.route({
+    method: 'GET',
+    url: '/multiauth',
+    preHandler: fastify.auth([
+      fastify.allowAnonymous,
+      fastify.verifyBearerAuth
+    ]),
+    handler: function (_, reply) {
+      reply.send({ hello: 'world' })
+    }
+  })
+
+  await fastify.listen({port: 8000})
+}
+
+server()
 ```
 
 By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
