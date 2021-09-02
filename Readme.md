@@ -91,22 +91,44 @@ This plugin can integrate with `fastify-auth` by following this example:
 
 ```js
 const fastify = require('fastify')()
+const auth = require('fastify-auth')
 const bearerAuthPlugin = require('fastify-bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
-fastify.register(bearerAuthPlugin, { addHook: false, keys})
+const server = async function () {
 
-fastify.route({
-  method: 'GET',
-  url: '/multiauth',
-  preHandler: fastify.auth([
-    fastify.allowAnonymous,
-    fastify.verifyBearerAuth
-  ]),
-  handler: function (_, reply) {
-    reply.send({ hello: 'world' })
-  }
-})
+  await fastify
+    .register(auth)
+    .register(bearerAuthPlugin, { addHook: false, keys})
+    .decorate('allowAnonymous', function (req, reply, done) {
+      if (req.headers.authorization) {
+        return done(Error('not anonymous'))
+      }
+      return done()
+    })
+
+  fastify.route({
+    method: 'GET',
+    url: '/multiauth',
+    preHandler: fastify.auth([
+      fastify.allowAnonymous,
+      fastify.verifyBearerAuth
+    ]),
+    handler: function (_, reply) {
+      reply.send({ hello: 'world' })
+    }
+  })
+
+  fastify.listen({port: 8000}, (err) => {
+    if (err) {
+      fastify.log.error(err.message)
+      process.exit(1)
+    }
+    fastify.log.info('http://127.0.0.1:8000/foo')
+  })
+}
+
+server()
 ```
 
 By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
