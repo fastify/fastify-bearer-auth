@@ -59,7 +59,7 @@ function verifyBearerAuthFactory (options) {
     Promise.resolve(retVal).then((val) => {
       // if val is not truthy return 401
       if (val === false) {
-        request.log.error('invalid authorization header: `%s`', header)
+        request.log.error('unauthorized: %s', invalidKeyError.message)
         if (contentType) reply.header('content-type', contentType)
         reply.code(401)
         if (!addHook) return done(invalidKeyError)
