@@ -16,13 +16,16 @@ const defaultOptions = {
 function verifyBearerAuthFactory (options) {
   const _options = Object.assign({}, defaultOptions, options)
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
-  const { keys, errorResponse, contentType, bearerType, auth, addHook = true } = _options
-
+  const { keys, errorResponse, contentType, bearerType, auth, addHook = true, verifyErrorLogLevel = 'error' } = _options
+  
+  const inValidLogLevelError = Error('invalid log level')
+  if ( verifyErrorLogLevel == null || ['debug','info','warn','error'].indexOf(verifyErrorLogLevel) < 0 ) throw inValidLogLevelError
+  
   return function verifyBearerAuth (request, reply, done) {
     const header = request.raw.headers.authorization
     if (!header) {
       const noHeaderError = Error('missing authorization header')
-      if (addHook) request.log.error('unauthorized: %s', noHeaderError.message)
+      request.log[verifyErrorLogLevel]('unauthorized: %s', noHeaderError.message)
       if (contentType) reply.header('content-type', contentType)
       reply.code(401)
       if (!addHook) {
@@ -59,7 +62,7 @@ function verifyBearerAuthFactory (options) {
     Promise.resolve(retVal).then((val) => {
       // if val is not truthy return 401
       if (val === false) {
-        if (addHook) request.log.error('unauthorized: %s', invalidKeyError.message)
+        request.log[verifyErrorLogLevel]('unauthorized: %s', invalidKeyError.message)
         if (contentType) reply.header('content-type', contentType)
         reply.code(401)
         if (!addHook) return done(invalidKeyError)
