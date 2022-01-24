@@ -17,9 +17,8 @@ function verifyBearerAuthFactory (options) {
   const _options = Object.assign({}, defaultOptions, options)
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
   const { keys, errorResponse, contentType, bearerType, auth, addHook = true, verifyErrorLogLevel = 'error' } = _options
-  
   const inValidLogLevelError = Error('invalid log level')
-  if ( verifyErrorLogLevel == null || ['debug','info','warn','error'].indexOf(verifyErrorLogLevel) < 0 ) throw inValidLogLevelError
+  if (verifyErrorLogLevel == null || ['debug', 'info', 'warn', 'error'].indexOf(verifyErrorLogLevel) < 0) throw inValidLogLevelError
   
   return function verifyBearerAuth (request, reply, done) {
     const header = request.raw.headers.authorization
