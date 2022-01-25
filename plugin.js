@@ -17,8 +17,6 @@ function verifyBearerAuthFactory (options) {
   const _options = Object.assign({}, defaultOptions, options)
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
   const { keys, errorResponse, contentType, bearerType, auth, addHook = true, verifyErrorLogLevel = 'error' } = _options
-  const inValidLogLevelError = Error('invalid log level')
-  if (verifyErrorLogLevel == null || ['debug', 'info', 'warn', 'error'].indexOf(verifyErrorLogLevel) < 0) throw inValidLogLevelError
   
   return function verifyBearerAuth (request, reply, done) {
     const header = request.raw.headers.authorization
@@ -105,8 +103,13 @@ function compare (a, b) {
 }
 
 function plugin (fastify, options, done) {
-  options = Object.assign({ addHook: true }, options)
-
+  options = Object.assign({ addHook: true, verifyErrorLogLevel: 'error' }, options)
+  
+  const invalidLogLevelError = Error('invalid options.verifyErrorLogLevel value')
+  if (typeof options.verifyErrorLogLevel !== 'string'
+      || !Object.prototype.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel)
+      || (typeof fastify.log[options.verifyErrorLogLevel]) === 'function') throw invalidLogLevelError
+  
   if (options.addHook === true) {
     fastify.addHook('onRequest', verifyBearerAuthFactory(options))
   } else {
