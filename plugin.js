@@ -17,12 +17,12 @@ function verifyBearerAuthFactory (options) {
   const _options = Object.assign({}, defaultOptions, options)
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
   const { keys, errorResponse, contentType, bearerType, auth, addHook = true, verifyErrorLogLevel = 'error' } = _options
-  
+
   return function verifyBearerAuth (request, reply, done) {
     const header = request.raw.headers.authorization
     if (!header) {
       const noHeaderError = Error('missing authorization header')
-      request.log[verifyErrorLogLevel]('unauthorized: %s', noHeaderError.message)
+      if (verifyErrorLogLevel) request.log[verifyErrorLogLevel]('unauthorized: %s', noHeaderError.message)
       if (contentType) reply.header('content-type', contentType)
       reply.code(401)
       if (!addHook) {
@@ -39,12 +39,12 @@ function verifyBearerAuthFactory (options) {
     if (auth && auth instanceof Function) {
       try {
         retVal = auth(key, request)
-      // catch any error from the user provided function
+        // catch any error from the user provided function
       } catch (err) {
         retVal = Promise.reject(err)
       }
     } else {
-    // if auth is not defined use keys
+      // if auth is not defined use keys
       retVal = authenticate(keys, key)
     }
 
@@ -59,7 +59,7 @@ function verifyBearerAuthFactory (options) {
     Promise.resolve(retVal).then((val) => {
       // if val is not truthy return 401
       if (val === false) {
-        request.log[verifyErrorLogLevel]('unauthorized: %s', invalidKeyError.message)
+        if (verifyErrorLogLevel) request.log[verifyErrorLogLevel]('unauthorized: %s', invalidKeyError.message)
         if (contentType) reply.header('content-type', contentType)
         reply.code(401)
         if (!addHook) return done(invalidKeyError)
@@ -103,13 +103,20 @@ function compare (a, b) {
 }
 
 function plugin (fastify, options, done) {
-  options = Object.assign({ addHook: true, verifyErrorLogLevel: 'error' }, options)
-  
-  const invalidLogLevelError = Error('invalid options.verifyErrorLogLevel value')
-  if (typeof options.verifyErrorLogLevel !== 'string'
-      || !Object.prototype.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel)
-      || (typeof fastify.log[options.verifyErrorLogLevel]) === 'function') throw invalidLogLevelError
-  
+  const defaultLogLevel = 'error'
+  options = Object.assign({ addHook: true, verifyErrorLogLevel: defaultLogLevel }, options)
+
+  if (!Object.hasOwnProperty.call(fastify.log, 'error') ||
+    (typeof fastify.log.error) !== 'function') options.verifyErrorLogLevel = null
+  if (options.verifyErrorLogLevel != null &&
+    (typeof options.verifyErrorLogLevel !== 'string' ||
+      !Object.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel) ||
+      (typeof fastify.log[options.verifyErrorLogLevel]) !== 'function'
+    )) {
+    const invalidLogLevelError = Error(`fastify.log does not have level '${options.verifyErrorLogLevel}'`)
+    done(invalidLogLevelError)
+  }
+
   if (options.addHook === true) {
     fastify.addHook('onRequest', verifyBearerAuthFactory(options))
   } else {
