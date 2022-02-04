@@ -59,6 +59,9 @@ sent to the client (optional)
 * `addHook`: If `false`, this plugin will not register `onRequest` hook automatically,
    instead it provide two decorations `fastify.verifyBearerAuth` and
    `fastify.verifyBearerAuthFactory` for you.
+* `verifyErrorLogLevel`: string specifying the log level when verify error (optional).
+   The value must be vaild log level support by fastify, otherwise exception will be throwed
+   when register the plugin. default value is `error`.
 
 The default configuration object is:
 
@@ -99,7 +102,7 @@ async function server() {
 
   await fastify
     .register(auth)
-    .register(bearerAuthPlugin, { addHook: false, keys})
+    .register(bearerAuthPlugin, { addHook: false, keys, verifyErrorLogLevel: 'debug' })
     .decorate('allowAnonymous', function (req, reply, done) {
       if (req.headers.authorization) {
         return done(Error('not anonymous'))
@@ -128,6 +131,9 @@ server()
 By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
 immediately replying on error (`reply.send(someError)`), invokes `done(someError)`. This
 will allow `fastify.auth` to continue with the next authentication scheme in the hook list.
+Also by set `{ verifyErrorLogLevel: 'debug' }` in the options, the `fastify.auth` will log the 
+verify error to `debug` level, since it is not the only authentication method here, log at `error`
+level may be not appropiated.
 If `verifyBearerAuth` is the last hook in the list, `fastify.auth` will reply with `Unauthorized`.
 ## License
 
