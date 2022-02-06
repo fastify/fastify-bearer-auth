@@ -131,9 +131,8 @@ server()
 By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
 immediately replying on error (`reply.send(someError)`), invokes `done(someError)`. This
 will allow `fastify.auth` to continue with the next authentication scheme in the hook list.
-Also by set `{ verifyErrorLogLevel: 'debug' }` in the options, the `fastify.auth` will log the 
-verify error to `debug` level, since it is not the only authentication method here, log at `error`
-level may be not appropiated.
+Note that by setting `{ verifyErrorLogLevel: 'debug' }` in the options, `fastify-bearer-auth` will emit all the 
+verification's errors logs at the `debug` level. Since it is not the only authentication method here, to emit verification's errors logs at  the `error` level may be not appropriate here.
 If `verifyBearerAuth` is the last hook in the list, `fastify.auth` will reply with `Unauthorized`.
 ## License
 
