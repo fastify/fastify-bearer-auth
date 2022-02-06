@@ -35,6 +35,15 @@ expectAssignable<{
   bearerType?: string
 }>(pluginOptionsAuthPromise)
 
+expectAssignable<{
+  keys: Set<string>,
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
+  errorResponse?: (err: Error) => { error: string },
+  contentType?: string,
+  bearerType?: string,
+  verifyErrorLogLevel? : string
+}>(pluginOptionsAuthPromise)
+
 fastify().register(bearerAuth, pluginOptions)
 fastify().register(bearerAuth, pluginOptionsAuthPromise)
 

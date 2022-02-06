@@ -7,7 +7,8 @@ declare namespace fastifyBearerAuth {
     errorResponse?: (err: Error) => { error: string },
     contentType?: string,
     bearerType?: string,
-    addHook?: boolean
+    addHook?: boolean,
+    verifyErrorLogLevel?: string
   }
 
   export type verifyBearerAuth = (request: fastify.FastifyRequest, reply: fastify.FastifyReply, done: (err?: Error) => void) => void
