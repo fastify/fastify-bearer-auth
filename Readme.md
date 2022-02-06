@@ -59,7 +59,7 @@ sent to the client (optional)
 * `addHook`: If `false`, this plugin will not register `onRequest` hook automatically,
    instead it provide two decorations `fastify.verifyBearerAuth` and
    `fastify.verifyBearerAuthFactory` for you.
-* `verifyErrorLogLevel`: an optional string specifying the log level when there is a verification error.
+* `verifyErrorLogLevel`: An optional string specifying the log level when there is a verification error.
    It must be a valid log level supported by fastify, otherwise an exception will be thrown
    when registering the plugin. By default, this option is set to `error`.
 
