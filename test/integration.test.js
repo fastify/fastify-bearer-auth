@@ -53,7 +53,7 @@ test('missing header route fails correctly', (t) => {
   })
 })
 
-test('integration with fastify-auth', async (t) => {
+test('integration with @fastify/auth', async (t) => {
   t.plan(3)
 
   const fastify = require('fastify')()
@@ -64,7 +64,7 @@ test('integration with fastify-auth', async (t) => {
     }
     return done(new Error('not anonymous'))
   })
-  await fastify.register(require('fastify-auth'))
+  await fastify.register(require('@fastify/auth'))
 
   fastify.route({
     method: 'GET',
@@ -114,7 +114,7 @@ test('integration with fastify-auth', async (t) => {
   })
 })
 
-test('integration with fastify-auth; not the last auth option', async (t) => {
+test('integration with @fastify/auth; not the last auth option', async (t) => {
   t.plan(3)
 
   const fastify = require('fastify')()
@@ -122,7 +122,7 @@ test('integration with fastify-auth; not the last auth option', async (t) => {
   await fastify.decorate('alwaysValidAuth', function (request, _, done) {
     return done()
   })
-  await fastify.register(require('fastify-auth'))
+  await fastify.register(require('@fastify/auth'))
 
   fastify.route({
     method: 'GET',
