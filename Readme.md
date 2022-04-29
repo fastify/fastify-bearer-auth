@@ -1,12 +1,12 @@
-# fastify-bearer-auth
+# @fastify/bearer-auth
 
 ![CI](https://github.com/fastify/fastify-bearer-auth/workflows/CI/badge.svg)
-[![npm version](https://img.shields.io/npm/v/fastify-bearer-auth)](https://www.npmjs.com/package/fastify-bearer-auth)
+[![npm version](https://img.shields.io/npm/v/@fastify/bearer-auth)](https://www.npmjs.com/package/@fastify/bearer-auth)
 [![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-bearer-auth/badge.svg)](https://snyk.io/test/github/fastify/fastify-bearer-auth)
 [![Coverage Status](https://coveralls.io/repos/github/fastify/fastify-bearer-auth/badge.svg?branch=master)](https://coveralls.io/github/fastify/fastify-bearer-auth?branch=master)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
-*fastify-bearer-auth* provides a simple request hook for the [Fastify][fastify]
+*@fastify/bearer-auth* provides a simple request hook for the [Fastify][fastify]
 web framework.
 
 [fastify]: https://fastify.io/
@@ -17,7 +17,7 @@ web framework.
 'use strict'
 
 const fastify = require('fastify')()
-const bearerAuthPlugin = require('fastify-bearer-auth')
+const bearerAuthPlugin = require('@fastify/bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
 fastify.register(bearerAuthPlugin, {keys})
@@ -36,7 +36,7 @@ fastify.listen({port: 8000}, (err) => {
 
 ## API
 
-*fastify-bearer-auth* exports a standard [Fastify plugin][fplugin]. This allows
+*@fastify/bearer-auth* exports a standard [Fastify plugin][fplugin]. This allows
 you to register the plugin within scoped paths. Therefore, you could have some
 paths that are not protected by the plugin and others that are. See the [Fastify][fastify]
 documentation and examples for more details.
@@ -88,14 +88,14 @@ a `{error: message}` body; no further request processing will be performed.
 [fplugin]: https://github.com/fastify/fastify/blob/master/docs/Plugins.md
 [prehook]: https://github.com/fastify/fastify/blob/master/docs/Hooks.md
 
-## Integration with `fastify-auth`
+## Integration with `@fastify/auth`
 
-This plugin can integrate with `fastify-auth` by following this example:
+This plugin can integrate with `@fastify/auth` by following this example:
 
 ```js
 const fastify = require('fastify')()
-const auth = require('fastify-auth')
-const bearerAuthPlugin = require('fastify-bearer-auth')
+const auth = require('@fastify/auth')
+const bearerAuthPlugin = require('@fastify/bearer-auth')
 const keys = new Set(['a-super-secret-key', 'another-super-secret-key'])
 
 async function server() {
@@ -131,7 +131,7 @@ server()
 By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
 immediately replying on error (`reply.send(someError)`), invokes `done(someError)`. This
 will allow `fastify.auth` to continue with the next authentication scheme in the hook list.
-Note that by setting `{ verifyErrorLogLevel: 'debug' }` in the options, `fastify-bearer-auth` will emit all verification error logs at the `debug` level. Since it is not the only authentication method here, emitting verification error logs at the `error` level may be not appropriate here.
+Note that by setting `{ verifyErrorLogLevel: 'debug' }` in the options, `@fastify/bearer-auth` will emit all verification error logs at the `debug` level. Since it is not the only authentication method here, emitting verification error logs at the `error` level may be not appropriate here.
 If `verifyBearerAuth` is the last hook in the list, `fastify.auth` will reply with `Unauthorized`.
 ## License
 
