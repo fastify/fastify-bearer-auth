@@ -15,7 +15,7 @@ test('hook rejects for missing header', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -37,8 +37,8 @@ test('hook rejects for missing header with custom content type', (t) => {
   }
   const response = {
     code: () => response,
-    header: header,
-    send: send
+    header,
+    send
   }
   function header (key, value) {
     t.ok(key)
@@ -66,7 +66,7 @@ test('hook rejects header without bearer prefix', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -89,7 +89,7 @@ test('hook rejects malformed header', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -112,7 +112,7 @@ test('hook accepts correct header', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -138,7 +138,7 @@ test('hook accepts correct header and alternate Bearer', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -162,7 +162,7 @@ test('hook accepts correct header with extra padding', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -189,7 +189,7 @@ test('hook accepts correct header with auth function (promise)', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -216,7 +216,7 @@ test('hook accepts correct header with auth function (non-promise)', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -240,7 +240,7 @@ test('hook rejects wrong token with keys', (t) => {
   }
   const response = {
     code: () => response,
-    send: send
+    send
   }
 
   function send (body) {
@@ -266,8 +266,8 @@ test('hook rejects wrong token with custom content type', (t) => {
   }
   const response = {
     code: () => response,
-    header: header,
-    send: send
+    header,
+    send
   }
   function header (key, value) {
     t.ok(key)
@@ -305,7 +305,7 @@ test('hook rejects wrong token with auth function', (t) => {
       t.equal(401, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -338,7 +338,7 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
       t.equal(401, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -371,7 +371,7 @@ test('hook rejects with 500 when functions fails', (t) => {
       t.equal(500, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -404,7 +404,7 @@ test('hook rejects with 500 when promise rejects', (t) => {
       t.equal(500, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -437,7 +437,7 @@ test('hook rejects with 500 when promise rejects with non Error', (t) => {
       t.equal(500, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -465,7 +465,7 @@ test('hook returns proper error for valid key but failing callback', (t) => {
       t.equal(500, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -501,7 +501,7 @@ test('hook rejects with 500 when functions returns non-boolean', (t) => {
       t.equal(500, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
@@ -534,7 +534,7 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
       t.equal(500, status)
       return response
     },
-    send: send
+    send
   }
 
   function send (body) {
