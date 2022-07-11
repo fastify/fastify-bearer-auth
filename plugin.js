@@ -106,11 +106,11 @@ function plugin (fastify, options, done) {
   const defaultLogLevel = 'error'
   options = Object.assign({ addHook: true, verifyErrorLogLevel: defaultLogLevel }, options)
 
-  if (!Object.hasOwnProperty.call(fastify.log, 'error') ||
+  if (!Object.prototype.hasOwnProperty.call(fastify.log, 'error') ||
     (typeof fastify.log.error) !== 'function') options.verifyErrorLogLevel = null
   if (options.verifyErrorLogLevel != null &&
     (typeof options.verifyErrorLogLevel !== 'string' ||
-      !Object.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel) ||
+      !Object.prototype.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel) ||
       (typeof fastify.log[options.verifyErrorLogLevel]) !== 'function'
     )) {
     const invalidLogLevelError = Error(`fastify.log does not have level '${options.verifyErrorLogLevel}'`)
