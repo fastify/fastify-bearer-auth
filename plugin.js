@@ -18,6 +18,13 @@ function verifyBearerAuthFactory (options) {
   if (_options.keys instanceof Set) _options.keys = Array.from(_options.keys)
   const { keys, errorResponse, contentType, bearerType, auth, addHook = true, verifyErrorLogLevel = 'error' } = _options
 
+  for (let i = 0, il = keys.length; i < il; ++i) {
+    if (typeof keys[i] !== 'string') {
+      throw new Error('options.keys has to contain only string entries')
+    }
+    keys[i] = Buffer.from(keys[i])
+  }
+
   return function verifyBearerAuth (request, reply, done) {
     const header = request.raw.headers.authorization
     if (!header) {
@@ -89,17 +96,19 @@ function verifyBearerAuthFactory (options) {
 }
 
 function authenticate (keys, key) {
-  return keys.findIndex((a) => compare(a, key)) !== -1
+  const b = Buffer.from(key)
+  return keys.findIndex((a) => compare(a, b)) !== -1
 }
 
 // perform constant-time comparison to prevent timing attacks
 function compare (a, b) {
-  try {
-    // may throw if they have different length, can't convert to Buffer, etc...
-    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b))
-  } catch {
+  if (a.length !== b.length) {
+    // Delay return with cryptographically secure timing check.
+    crypto.timingSafeEqual(a, a)
     return false
   }
+
+  return crypto.timingSafeEqual(a, b)
 }
 
 function plugin (fastify, options, done) {

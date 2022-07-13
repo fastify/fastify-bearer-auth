@@ -20,3 +20,11 @@ test('verifyBearerAuthFactory', (t) => {
     t.ok(fastify.verifyBearerAuthFactory)
   })
 })
+
+test('verifyBearerAuthFactory', (t) => {
+  t.plan(1)
+  fastify.ready(() => {
+    const keys = { keys: new Set([123456]) }
+    t.throws(() => fastify.verifyBearerAuthFactory(keys), /keys has to contain only string entries/)
+  })
+})
