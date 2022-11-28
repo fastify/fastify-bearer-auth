@@ -1,6 +1,6 @@
 import fastify, { FastifyRequest } from 'fastify'
 import { expectAssignable, expectType } from 'tsd'
-import { default as bearerAuth, FastifyBearerAuthOptions } from '../plugin'
+import { default as bearerAuth, FastifyBearerAuthOptions, verifyBearerAuth, verifyBearerAuthFactory } from '..'
 
 const pluginOptions: FastifyBearerAuthOptions = {
   keys: new Set(['foo']),
@@ -47,5 +47,5 @@ expectAssignable<{
 fastify().register(bearerAuth, pluginOptions)
 fastify().register(bearerAuth, pluginOptionsAuthPromise)
 
-expectType<bearerAuth.verifyBearerAuth | undefined>(fastify().verifyBearerAuth)
-expectType<bearerAuth.verifyBearerAuthFactory | undefined>(fastify().verifyBearerAuthFactory)
+expectType<verifyBearerAuth | undefined>(fastify().verifyBearerAuth)
+expectType<verifyBearerAuthFactory | undefined>(fastify().verifyBearerAuthFactory)

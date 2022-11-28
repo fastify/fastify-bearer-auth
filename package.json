@@ -2,8 +2,8 @@
   "name": "@fastify/bearer-auth",
   "version": "8.0.1",
   "description": "An authentication plugin for Fastify",
-  "main": "plugin.js",
-  "types": "plugin.d.ts",
+  "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "lint": "standard | snazzy",
     "lint:ci": "standard",
