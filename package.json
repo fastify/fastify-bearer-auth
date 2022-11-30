@@ -5,10 +5,10 @@
   "main": "index.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "lint": "standard | snazzy",
-    "lint:ci": "standard",
-    "test": "tap \"test/**/*.test.js\" && tsd",
-    "test:ci": "tap \"test/**/*.test.js\" --coverage-report=lcovonly && tsd"
+    "lint": "standard",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:typescript": "tsd",
+    "test:unit": "tap"
   },
   "precommit": [
     "lint",
@@ -33,7 +33,6 @@
     "@fastify/pre-commit": "^2.0.2",
     "@types/node": "^18.0.0",
     "fastify": "^4.0.0-rc.2",
-    "snazzy": "^9.0.0",
     "standard": "^17.0.0",
     "tap": "^16.0.0",
     "tsd": "^0.24.1"
@@ -41,12 +40,10 @@
   "dependencies": {
     "fastify-plugin": "^4.0.0"
   },
-  "tsd": {
-    "directory": "test",
-    "compilerOptions": {
-      "esModuleInterop": true
-    }
-  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
   "publishConfig": {
     "access": "public"
   }
