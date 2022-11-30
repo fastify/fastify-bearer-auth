@@ -3,7 +3,7 @@
 const fp = require('fastify-plugin')
 const verifyBearerAuthFactory = require('./lib/verifyBearerAuthFactory')
 
-function plugin (fastify, options, done) {
+function fastifyBearerAuth (fastify, options, done) {
   const defaultLogLevel = 'error'
   options = Object.assign({ addHook: true, verifyErrorLogLevel: defaultLogLevel }, options)
 
@@ -28,7 +28,9 @@ function plugin (fastify, options, done) {
   done()
 }
 
-module.exports = fp(plugin, {
+module.exports = fp(fastifyBearerAuth, {
   fastify: '4.x',
   name: '@fastify/bearer-auth'
 })
+module.exports.default = fastifyBearerAuth
+module.exports.fastifyBearerAuth = fastifyBearerAuth
