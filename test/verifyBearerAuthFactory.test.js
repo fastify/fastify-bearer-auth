@@ -1,18 +1,10 @@
 'use strict'
 
-const { test, before } = require('tap')
+const test = require('tap').test
 const noop = () => {}
-const fastifyBearerAuth = require('..')
+const verifyBearerAuthFactory = require('../lib/verifyBearerAuthFactory')
 const key = '123456789012354579814'
 const keys = { keys: new Set([key]) }
-const Fastify = require('fastify')
-let plugin
-
-before(async function () {
-  const fastify = new Fastify({})
-  await fastify.register(fastifyBearerAuth, { addHook: false })
-  plugin = fastify.verifyBearerAuthFactory
-})
 
 test('hook rejects for missing header', (t) => {
   t.plan(2)
@@ -31,7 +23,7 @@ test('hook rejects for missing header', (t) => {
     t.match(body.error, /missing authorization header/)
   }
 
-  const hook = plugin()
+  const hook = verifyBearerAuthFactory()
   hook(request, response)
 })
 
@@ -59,7 +51,7 @@ test('hook rejects for missing header with custom content type', (t) => {
     t.match(body.error, /missing authorization header/)
   }
 
-  const hook = plugin({ contentType: CUSTOM_CONTENT_TYPE })
+  const hook = verifyBearerAuthFactory({ contentType: CUSTOM_CONTENT_TYPE })
   hook(request, response)
 })
 
@@ -82,7 +74,7 @@ test('hook rejects header without bearer prefix', (t) => {
     t.match(body.error, /invalid authorization header/)
   }
 
-  const hook = plugin(keys)
+  const hook = verifyBearerAuthFactory(keys)
   hook(request, response)
 })
 
@@ -105,7 +97,7 @@ test('hook rejects malformed header', (t) => {
     t.match(body.error, /invalid authorization header/)
   }
 
-  const hook = plugin(keys)
+  const hook = verifyBearerAuthFactory(keys)
   hook(request, response)
 })
 
@@ -127,7 +119,7 @@ test('hook accepts correct header', (t) => {
     t.fail('should not happen')
   }
 
-  const hook = plugin(keys)
+  const hook = verifyBearerAuthFactory(keys)
   hook(request, response, () => {
     t.pass()
   })
@@ -153,7 +145,7 @@ test('hook accepts correct header and alternate Bearer', (t) => {
     t.fail('should not happen')
   }
 
-  const hook = plugin(keysAlt)
+  const hook = verifyBearerAuthFactory(keysAlt)
   hook(request, response, () => {
     t.pass()
   })
@@ -177,7 +169,7 @@ test('hook accepts correct header with extra padding', (t) => {
     t.fail('should not happen')
   }
 
-  const hook = plugin(keys)
+  const hook = verifyBearerAuthFactory(keys)
   hook(request, response, () => {
     t.pass()
   })
@@ -204,7 +196,7 @@ test('hook accepts correct header with auth function (promise)', (t) => {
     t.fail('should not happen')
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.pass()
   })
@@ -231,7 +223,7 @@ test('hook accepts correct header with auth function (non-promise)', (t) => {
     t.fail('should not happen')
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.pass()
   })
@@ -256,7 +248,7 @@ test('hook rejects wrong token with keys', (t) => {
     t.match(body.error, /invalid authorization header/)
   }
 
-  const hook = plugin(keys)
+  const hook = verifyBearerAuthFactory(keys)
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -288,7 +280,7 @@ test('hook rejects wrong token with custom content type', (t) => {
     t.match(body.error, /invalid authorization header/)
   }
 
-  const hook = plugin({ ...keys, contentType: CUSTOM_CONTENT_TYPE })
+  const hook = verifyBearerAuthFactory({ ...keys, contentType: CUSTOM_CONTENT_TYPE })
   hook(request, response)
 })
 
@@ -321,7 +313,7 @@ test('hook rejects wrong token with auth function', (t) => {
     t.match(body.error, /invalid authorization header/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -354,7 +346,7 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
     t.match(body.error, /invalid authorization header/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -387,7 +379,7 @@ test('hook rejects with 500 when functions fails', (t) => {
     t.match(body.error, /failing/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -420,7 +412,7 @@ test('hook rejects with 500 when promise rejects', (t) => {
     t.match(body.error, /failing/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -453,7 +445,7 @@ test('hook rejects with 500 when promise rejects with non Error', (t) => {
     t.match(body.error, /failing/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -481,7 +473,7 @@ test('hook returns proper error for valid key but failing callback', (t) => {
     t.match(body.error, /foo!/)
   }
 
-  const hook = plugin(keys)
+  const hook = verifyBearerAuthFactory(keys)
   hook(request, response, (err) => {
     if (err) {
       t.pass(err)
@@ -517,7 +509,7 @@ test('hook rejects with 500 when functions returns non-boolean', (t) => {
     t.match(body.error, /internal server error/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -550,7 +542,7 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
     t.match(body.error, /internal server error/)
   }
 
-  const hook = plugin({ auth })
+  const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
     t.fail('should not accept')
   })
@@ -577,7 +569,7 @@ test('hook rejects with 500 when functions returns non-boolean (addHook: false)'
     }
   }
 
-  const hook = plugin({ auth, addHook: false })
+  const hook = verifyBearerAuthFactory({ auth, addHook: false })
   hook(request, response, (err) => {
     t.ok(err)
     t.match(err.message, /internal server error/)
@@ -605,7 +597,7 @@ test('hook rejects with 500 when promise rejects (addHook: false)', (t) => {
     }
   }
 
-  const hook = plugin({ auth, addHook: false })
+  const hook = verifyBearerAuthFactory({ auth, addHook: false })
   hook(request, response, (err) => {
     t.ok(err)
     t.match(err.message, /failing/)
