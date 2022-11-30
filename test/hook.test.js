@@ -1,10 +1,18 @@
 'use strict'
 
-const test = require('tap').test
+const { test, before } = require('tap')
 const noop = () => {}
-const plugin = require('../').internals.factory
+const fastifyBearerAuth = require('..')
 const key = '123456789012354579814'
 const keys = { keys: new Set([key]) }
+const Fastify = require('fastify')
+let plugin
+
+before(async function () {
+  const fastify = new Fastify({})
+  await fastify.register(fastifyBearerAuth, { addHook: false })
+  plugin = fastify.verifyBearerAuthFactory
+})
 
 test('hook rejects for missing header', (t) => {
   t.plan(2)
