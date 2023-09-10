@@ -1,7 +1,7 @@
 'use strict'
 
 const { test } = require('tap')
-const stream = require('stream')
+const stream = require('node:stream')
 const Fastify = require('fastify')
 const plugin = require('..')
 
