@@ -3,6 +3,7 @@
   "version": "9.0.0",
   "description": "An authentication plugin for Fastify",
   "main": "index.js",
+  "type": "commonjs",
   "types": "types/index.d.ts",
   "scripts": {
     "lint": "standard",
