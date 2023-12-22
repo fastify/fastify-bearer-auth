@@ -55,6 +55,73 @@ test('hook rejects for missing header with custom content type', (t) => {
   hook(request, response)
 })
 
+test('hook rejects for wrong bearer type but same string length as `bearer`', (t) => {
+  t.plan(2)
+
+  const request = {
+    log: { error: noop },
+    raw: { headers: { authorization: `reraeB ${key}` } }
+  }
+  const response = {
+    code: () => response,
+    send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = verifyBearerAuthFactory()
+  hook(request, response)
+})
+
+test('hook rejects for wrong bearer type', (t) => {
+  t.plan(2)
+
+  const request = {
+    log: { error: noop },
+    raw: { headers: { authorization: `fake-bearer ${key}` } }
+  }
+  const response = {
+    code: () => response,
+    send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = verifyBearerAuthFactory()
+  hook(request, response)
+})
+
+test('hook rejects for wrong alternate Bearer', (t) => {
+  t.plan(2)
+
+  const bearerAlt = 'BearerAlt'
+  const keysAlt = { keys: new Set([key]), bearerType: bearerAlt }
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: `tlAreraeB ${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = verifyBearerAuthFactory(keysAlt)
+  hook(request, response)
+})
+
 test('hook rejects header without bearer prefix', (t) => {
   t.plan(2)
 
