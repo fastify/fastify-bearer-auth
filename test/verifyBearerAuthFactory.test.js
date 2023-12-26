@@ -174,7 +174,7 @@ test('hook accepts correct header', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: `bearer ${key}` }
+      headers: { authorization: `Bearer ${key}` }
     }
   }
   const response = {
@@ -224,7 +224,7 @@ test('hook accepts correct header with extra padding', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: `bearer   ${key}   ` }
+      headers: { authorization: `Bearer   ${key}   ` }
     }
   }
   const response = {
@@ -251,7 +251,7 @@ test('hook accepts correct header with auth function (promise)', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: `bearer ${key}` }
+      headers: { authorization: `Bearer ${key}` }
     }
   }
   const response = {
@@ -278,7 +278,7 @@ test('hook accepts correct header with auth function (non-promise)', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: `bearer ${key}` }
+      headers: { authorization: `Bearer ${key}` }
     }
   }
   const response = {
@@ -302,7 +302,7 @@ test('hook rejects wrong token with keys', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdedfg' }
+      headers: { authorization: 'Bearer abcdedfg' }
     }
   }
   const response = {
@@ -328,7 +328,7 @@ test('hook rejects wrong token with custom content type', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -357,7 +357,7 @@ test('hook rejects wrong token with auth function', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
 
@@ -397,7 +397,7 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -430,7 +430,7 @@ test('hook rejects with 500 when functions fails', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -463,7 +463,7 @@ test('hook rejects with 500 when promise rejects', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -496,7 +496,7 @@ test('hook rejects with 500 when promise rejects with non Error', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -524,7 +524,7 @@ test('hook returns proper error for valid key but failing callback', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: `bearer ${key}` }
+      headers: { authorization: `Bearer ${key}` }
     }
   }
   const response = {
@@ -560,7 +560,7 @@ test('hook rejects with 500 when functions returns non-boolean', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -593,7 +593,7 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -626,7 +626,7 @@ test('hook rejects with 500 when functions returns non-boolean (addHook: false)'
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
@@ -654,7 +654,7 @@ test('hook rejects with 500 when promise rejects (addHook: false)', (t) => {
   const request = {
     log: { error: noop },
     raw: {
-      headers: { authorization: 'bearer abcdefg' }
+      headers: { authorization: 'Bearer abcdefg' }
     }
   }
   const response = {
