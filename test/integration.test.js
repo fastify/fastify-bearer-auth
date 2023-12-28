@@ -43,6 +43,22 @@ test('invalid key route fails correctly', (t) => {
   })
 })
 
+test('missing space between bearerType and key fails correctly', (t) => {
+  t.plan(2)
+  fastify.inject({
+    method: 'GET',
+    url: '/test',
+    headers: {
+      authorization: 'Bearer123456'
+    }
+  }).then(response => {
+    t.equal(response.statusCode, 401)
+    t.match(JSON.parse(response.body).error, /invalid authorization header/)
+  }).catch(err => {
+    t.error(err)
+  })
+})
+
 test('missing header route fails correctly', (t) => {
   t.plan(2)
   fastify.inject({ method: 'GET', url: '/test' }).then(response => {
