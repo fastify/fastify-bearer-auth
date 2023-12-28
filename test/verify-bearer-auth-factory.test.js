@@ -2,7 +2,7 @@
 
 const test = require('tap').test
 const noop = () => {}
-const verifyBearerAuthFactory = require('../lib/verifyBearerAuthFactory')
+const verifyBearerAuthFactory = require('../lib/verify-bearer-auth-factory')
 const key = '123456789012354579814'
 const keys = { keys: new Set([key]) }
 
@@ -216,6 +216,29 @@ test('hook accepts correct header and alternate Bearer', (t) => {
   hook(request, response, () => {
     t.pass()
   })
+})
+
+test('hook throws if header misses at least one space after bearerType', (t) => {
+  t.plan(2)
+
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: `Bearer${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send
+  }
+
+  function send (body) {
+    t.ok(body.error)
+    t.match(body.error, /invalid authorization header/)
+  }
+
+  const hook = verifyBearerAuthFactory(keys)
+  hook(request, response)
 })
 
 test('hook accepts correct header with extra padding', (t) => {

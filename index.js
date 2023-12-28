@@ -1,7 +1,7 @@
 'use strict'
 
 const fp = require('fastify-plugin')
-const verifyBearerAuthFactory = require('./lib/verifyBearerAuthFactory')
+const verifyBearerAuthFactory = require('./lib/verify-bearer-auth-factory')
 
 function fastifyBearerAuth (fastify, options, done) {
   const defaultLogLevel = 'error'

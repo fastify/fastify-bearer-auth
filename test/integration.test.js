@@ -43,6 +43,22 @@ test('invalid key route fails correctly', (t) => {
   })
 })
 
+test('missing space between bearerType and key fails correctly', (t) => {
+  t.plan(2)
+  fastify.inject({
+    method: 'GET',
+    url: '/test',
+    headers: {
+      authorization: 'Bearer123456'
+    }
+  }).then(response => {
+    t.equal(response.statusCode, 401)
+    t.match(JSON.parse(response.body).error, /invalid authorization header/)
+  }).catch(err => {
+    t.error(err)
+  })
+})
+
 test('missing header route fails correctly', (t) => {
   t.plan(2)
   fastify.inject({ method: 'GET', url: '/test' }).then(response => {
@@ -58,7 +74,7 @@ test('integration with @fastify/auth', async (t) => {
 
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
-  await fastify.decorate('allowAnonymous', function (request, _, done) {
+  fastify.decorate('allowAnonymous', function (request, _, done) {
     if (!request.headers.authorization) {
       return done()
     }
@@ -119,7 +135,7 @@ test('integration with @fastify/auth; not the last auth option', async (t) => {
 
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
-  await fastify.decorate('alwaysValidAuth', function (request, _, done) {
+  fastify.decorate('alwaysValidAuth', function (request, _, done) {
     return done()
   })
   await fastify.register(require('@fastify/auth'))
