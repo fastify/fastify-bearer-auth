@@ -74,7 +74,7 @@ test('integration with @fastify/auth', async (t) => {
 
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
-  await fastify.decorate('allowAnonymous', function (request, _, done) {
+  fastify.decorate('allowAnonymous', function (request, _, done) {
     if (!request.headers.authorization) {
       return done()
     }
@@ -135,7 +135,7 @@ test('integration with @fastify/auth; not the last auth option', async (t) => {
 
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
-  await fastify.decorate('alwaysValidAuth', function (request, _, done) {
+  fastify.decorate('alwaysValidAuth', function (request, _, done) {
     return done()
   })
   await fastify.register(require('@fastify/auth'))
