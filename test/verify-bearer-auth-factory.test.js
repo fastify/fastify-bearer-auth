@@ -2,7 +2,7 @@
 
 const test = require('tap').test
 const noop = () => {}
-const verifyBearerAuthFactory = require('../lib/verifyBearerAuthFactory')
+const verifyBearerAuthFactory = require('../lib/verify-bearer-auth-factory')
 const key = '123456789012354579814'
 const keys = { keys: new Set([key]) }
 
