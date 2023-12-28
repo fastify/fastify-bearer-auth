@@ -18,4 +18,9 @@ fastify.listen({ port: 8000 }, (err) => {
   fastify.log.info('http://127.0.0.1:8000/foo')
 })
 
+// Missing Header
+// autocannon http://127.0.0.1:8000/foo
+// Invalid Header
+// autocannon -H authorization='Bearer invalid' http://127.0.0.1:8000/foo
+// Valid Request
 // autocannon -H authorization='Bearer key' http://127.0.0.1:8000/foo
