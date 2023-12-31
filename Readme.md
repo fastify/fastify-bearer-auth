@@ -74,7 +74,7 @@ The default configuration object is:
     keys: new Set(),
     contentType: undefined,
     bearerType: 'Bearer',
-    bearerTypeCaseSensitive: true,
+    specCompliance: 'rfc6750',
     errorResponse: (err) => {
       return {error: err.message}
     },
