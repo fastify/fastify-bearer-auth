@@ -19,6 +19,14 @@ const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
   bearerType: ''
 }
 
+const pluginOptionsKeyArray: FastifyBearerAuthOptions = {
+  keys: ['foo'],
+  auth: (key: string, req: FastifyRequest) => { return Promise.resolve(true) },
+  errorResponse: (err: Error) => { return { error: err.message } },
+  contentType: '',
+  bearerType: ''
+}
+
 expectAssignable<{
   keys: Set<string>,
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,

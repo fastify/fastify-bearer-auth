@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('tap').test
-const noop = () => {}
+const noop = () => { }
 const verifyBearerAuthFactory = require('../lib/verify-bearer-auth-factory')
 const key = '123456789012354579814'
 const keys = { keys: new Set([key]) }
@@ -692,4 +692,34 @@ test('hook rejects with 500 when promise rejects (addHook: false)', (t) => {
     t.ok(err)
     t.match(err.message, /failing/)
   })
+})
+
+test('options.keys can be an Array', (t) => {
+  t.plan(1)
+
+  const request = {
+    log: { error: noop },
+    raw: {
+      headers: { authorization: `Bearer ${key}` }
+    }
+  }
+  const response = {
+    code: () => response,
+    send
+  }
+
+  function send (body) {
+    t.fail('should not happen')
+  }
+
+  const hook = verifyBearerAuthFactory({ keys: [key] })
+  hook(request, response, () => {
+    t.pass()
+  })
+})
+
+test('options.keys throws if not an Array and not a Set', (t) => {
+  t.plan(1)
+
+  t.throws(() => verifyBearerAuthFactory({ keys: true }))
 })
