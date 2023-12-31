@@ -46,7 +46,8 @@ When registering the plugin you must specify a configuration object:
 sent to the client (optional)
 * `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
-* `bearerType`: string specifying the Bearer string (optional)`specCompliance`:
+* `bearerType`: string specifying the Bearer string (optional)
+* `specCompliance`:
 Configure how this plugin follow the spec. Accept either
 [`rfc6749`](https://datatracker.ietf.org/doc/html/rfc6749) or
 [`rfc6750`](https://datatracker.ietf.org/doc/html/rfc6750).
