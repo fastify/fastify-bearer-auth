@@ -47,6 +47,7 @@ sent to the client (optional)
 * `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
 * `bearerType`: string specifying the Bearer string (optional)
+* `bearerTypeCaseSensitive`: Configure if the bearerType should be case sensitive. Default is set to true. (optional)
 * `function auth (key, req) {}` : this function will test if `key` is a valid token.
    The function must return a literal `true` if the key is accepted or a literal
    `false` if rejected. The function may also return a promise that resolves to
@@ -68,6 +69,7 @@ The default configuration object is:
     keys: new Set(),
     contentType: undefined,
     bearerType: 'Bearer',
+    bearerTypeCaseSensitive: true,
     errorResponse: (err) => {
       return {error: err.message}
     },

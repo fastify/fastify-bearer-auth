@@ -41,7 +41,8 @@ expectAssignable<{
   errorResponse?: (err: Error) => { error: string },
   contentType?: string,
   bearerType?: string,
-  verifyErrorLogLevel? : string
+  verifyErrorLogLevel? : string,
+  bearerTypeCaseSensitive?: boolean;
 }>(pluginOptionsAuthPromise)
 
 fastify().register(bearerAuth, pluginOptions)

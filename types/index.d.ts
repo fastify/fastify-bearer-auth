@@ -20,6 +20,7 @@ declare namespace fastifyBearerAuth {
     errorResponse?: (err: Error) => { error: string },
     contentType?: string,
     bearerType?: string,
+    bearerTypeCaseSensitive?: boolean;
     addHook?: boolean,
     verifyErrorLogLevel?: string
   }
