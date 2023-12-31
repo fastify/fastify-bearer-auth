@@ -20,6 +20,7 @@ declare namespace fastifyBearerAuth {
     errorResponse?: (err: Error) => { error: string };
     contentType?: string;
     bearerType?: string;
+    specCompliance?: 'rfc6749' | 'rfc6750';
     addHook?: boolean;
     verifyErrorLogLevel?: string;
   }

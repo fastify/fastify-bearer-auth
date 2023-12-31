@@ -47,6 +47,13 @@ sent to the client (optional)
 * `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
 * `bearerType`: string specifying the Bearer string (optional)
+* `specCompliance`:
+Configure how this plugin follow the spec. Accept either
+[`rfc6749`](https://datatracker.ietf.org/doc/html/rfc6749) or
+[`rfc6750`](https://datatracker.ietf.org/doc/html/rfc6750).
+Default is set to `rfc6750`.
+  * `rfc6749` is about the generic OAuth2.0 protocol which allows token type to be case-insensitive.
+  * `rfc6750` is about the Bearer Token Usage which forces the token type to be exact match.
 * `function auth (key, req) {}` : this function will test if `key` is a valid token.
    The function must return a literal `true` if the key is accepted or a literal
    `false` if rejected. The function may also return a promise that resolves to
@@ -68,6 +75,7 @@ The default configuration object is:
     keys: new Set(),
     contentType: undefined,
     bearerType: 'Bearer',
+    specCompliance: 'rfc6750',
     errorResponse: (err) => {
       return {error: err.message}
     },
