@@ -2,20 +2,27 @@
 
 const fp = require('fastify-plugin')
 const verifyBearerAuthFactory = require('./lib/verify-bearer-auth-factory')
+const { FST_BEARER_AUTH_INVALID_LOG_LEVEL } = require('./lib/errors')
 
 function fastifyBearerAuth (fastify, options, done) {
-  const defaultLogLevel = 'error'
-  options = Object.assign({ addHook: true, verifyErrorLogLevel: defaultLogLevel }, options)
+  options = Object.assign({ addHook: true, verifyErrorLogLevel: 'error' }, options)
 
-  if (!Object.prototype.hasOwnProperty.call(fastify.log, 'error') ||
-    (typeof fastify.log.error) !== 'function') options.verifyErrorLogLevel = null
-  if (options.verifyErrorLogLevel != null &&
-    (typeof options.verifyErrorLogLevel !== 'string' ||
-      !Object.prototype.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel) ||
-      (typeof fastify.log[options.verifyErrorLogLevel]) !== 'function'
-    )) {
-    const invalidLogLevelError = Error(`fastify.log does not have level '${options.verifyErrorLogLevel}'`)
-    done(invalidLogLevelError)
+  if (
+    Object.prototype.hasOwnProperty.call(fastify.log, 'error') === false ||
+    typeof fastify.log.error !== 'function'
+  ) {
+    options.verifyErrorLogLevel = null
+  }
+
+  if (
+    options.verifyErrorLogLevel != null &&
+    (
+      typeof options.verifyErrorLogLevel !== 'string' ||
+      Object.prototype.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel) === false ||
+      typeof fastify.log[options.verifyErrorLogLevel] !== 'function'
+    )
+  ) {
+    done(new FST_BEARER_AUTH_INVALID_LOG_LEVEL(options.verifyErrorLogLevel))
   }
 
   if (options.addHook === true) {
