@@ -39,6 +39,7 @@
     "tsd": "^0.30.0"
   },
   "dependencies": {
+    "@fastify/error": "^3.4.1",
     "fastify-plugin": "^4.0.0"
   },
   "pre-commit": [
