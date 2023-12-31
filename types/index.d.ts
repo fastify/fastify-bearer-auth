@@ -15,14 +15,14 @@ type FastifyBearerAuth = FastifyPluginCallback<fastifyBearerAuth.FastifyBearerAu
 
 declare namespace fastifyBearerAuth {
   export interface FastifyBearerAuthOptions {
-    keys: Set<string>,
-    auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
-    errorResponse?: (err: Error) => { error: string },
-    contentType?: string,
-    bearerType?: string,
+    keys: Set<string> | string[];
+    auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+    errorResponse?: (err: Error) => { error: string };
+    contentType?: string;
+    bearerType?: string;
     bearerTypeCaseSensitive?: boolean;
-    addHook?: boolean,
-    verifyErrorLogLevel?: string
+    addHook?: boolean;
+    verifyErrorLogLevel?: string;
   }
 
   export type verifyBearerAuth = (request: FastifyRequest, reply: FastifyReply, done: (err?: Error) => void) => void
