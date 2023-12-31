@@ -5,13 +5,28 @@ const test = tap.test
 const fastify = require('fastify')()
 const plugin = require('../')
 
-fastify.register(plugin, { keys: new Set(['123456']), bearerTypeCaseSensitive: false })
+fastify.register(plugin, { keys: new Set(['123456']), specCompliance: 'rfc6749' })
 
 fastify.get('/test', (req, res) => {
   res.send({ hello: 'world' })
 })
 
-test('success route succeeds', async (t) => {
+test('bearerType starting with capital letter', async (t) => {
+  t.plan(2)
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: '/test',
+    headers: {
+      authorization: 'Bearer 123456'
+    }
+  })
+
+  t.equal(response.statusCode, 200)
+  t.same(JSON.parse(response.body), { hello: 'world' })
+})
+
+test('bearerType all lowercase', async (t) => {
   t.plan(2)
 
   const response = await fastify.inject({
@@ -19,6 +34,21 @@ test('success route succeeds', async (t) => {
     url: '/test',
     headers: {
       authorization: 'bearer 123456'
+    }
+  })
+
+  t.equal(response.statusCode, 200)
+  t.same(JSON.parse(response.body), { hello: 'world' })
+})
+
+test('bearerType all uppercase', async (t) => {
+  t.plan(2)
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: '/test',
+    headers: {
+      authorization: 'Bearer 123456'
     }
   })
 

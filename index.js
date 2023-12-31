@@ -25,14 +25,17 @@ function fastifyBearerAuth (fastify, options, done) {
     done(new FST_BEARER_AUTH_INVALID_LOG_LEVEL(options.verifyErrorLogLevel))
   }
 
-  if (options.addHook === true) {
-    fastify.addHook('onRequest', verifyBearerAuthFactory(options))
-  } else {
-    fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
-    fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
+  try {
+    if (options.addHook === true) {
+      fastify.addHook('onRequest', verifyBearerAuthFactory(options))
+    } else {
+      fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
+      fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
+    }
+    done()
+  } catch (err) {
+    done(err)
   }
-
-  done()
 }
 
 module.exports = fp(fastifyBearerAuth, {

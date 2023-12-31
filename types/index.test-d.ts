@@ -49,7 +49,7 @@ expectAssignable<{
   errorResponse?: (err: Error) => { error: string };
   contentType?: string;
   bearerType?: string;
-  bearerTypeCaseSensitive?: boolean;
+  specCompliance?: 'rfc6749' | 'rfc6750';
   verifyErrorLogLevel? : string;
 }>(pluginOptionsAuthPromise)
 
