@@ -19,29 +19,37 @@ const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
   bearerType: ''
 }
 
+const pluginOptionsKeyArray: FastifyBearerAuthOptions = {
+  keys: ['foo'],
+  auth: (key: string, req: FastifyRequest) => { return Promise.resolve(true) },
+  errorResponse: (err: Error) => { return { error: err.message } },
+  contentType: '',
+  bearerType: ''
+}
+
 expectAssignable<{
-  keys: Set<string>,
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
-  errorResponse?: (err: Error) => { error: string },
-  contentType?: string,
-  bearerType?: string
+  keys: Set<string> | string[];
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  errorResponse?: (err: Error) => { error: string };
+  contentType?: string;
+  bearerType?: string;
 }>(pluginOptions)
 
 expectAssignable<{
-  keys: Set<string>,
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
-  errorResponse?: (err: Error) => { error: string },
-  contentType?: string,
-  bearerType?: string
+  keys: Set<string> | string[];
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  errorResponse?: (err: Error) => { error: string };
+  contentType?: string;
+  bearerType?: string;
 }>(pluginOptionsAuthPromise)
 
 expectAssignable<{
-  keys: Set<string>,
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>,
-  errorResponse?: (err: Error) => { error: string },
-  contentType?: string,
-  bearerType?: string,
-  verifyErrorLogLevel? : string
+  keys: Set<string> | string[];
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  errorResponse?: (err: Error) => { error: string };
+  contentType?: string;
+  bearerType?: string;
+  verifyErrorLogLevel? : string;
 }>(pluginOptionsAuthPromise)
 
 fastify().register(bearerAuth, pluginOptions)
