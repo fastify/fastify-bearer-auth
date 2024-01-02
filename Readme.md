@@ -34,7 +34,7 @@ fastify.listen({port: 8000}, (err) => {
 
 ## API
 
-*@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin).
+*@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin). This allows
 you to register the plugin within scoped paths. Therefore, you could have some
 paths that are not protected by the plugin and others that are. See the [Fastify](https://fastify.dev/docs/latest)
 documentation and examples for more details.
