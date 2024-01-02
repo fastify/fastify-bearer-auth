@@ -34,9 +34,9 @@ fastify.listen({port: 8000}, (err) => {
 
 ## API
 
-*@fastify/bearer-auth* exports a standard [Fastify plugin][plugin]. This allows
+*@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin). This allows
 you to register the plugin within scoped paths. Therefore, you could have some
-paths that are not protected by the plugin and others that are. See the [Fastify][fastify]
+paths that are not protected by the plugin and others that are. See the [Fastify](https://fastify.dev/docs/latest)
 documentation and examples for more details.
 
 When registering the plugin you must specify a configuration object:
@@ -48,12 +48,12 @@ sent to the client (optional)
 `application/json`, then the `contentType` property must be set (optional)
 * `bearerType`: string specifying the Bearer string (optional)
 * `specCompliance`:
-Configure how this plugin follow the spec. Accept either
+Plugin spec compliance. Accepts either
 [`rfc6749`](https://datatracker.ietf.org/doc/html/rfc6749) or
 [`rfc6750`](https://datatracker.ietf.org/doc/html/rfc6750).
-Default is set to `rfc6750`.
-  * `rfc6749` is about the generic OAuth2.0 protocol which allows token type to be case-insensitive.
-  * `rfc6750` is about the Bearer Token Usage which forces the token type to be exact match.
+Defaults to `rfc6750`.
+  * `rfc6749` is about the generic OAuth2.0 protocol, which allows the token type to be case-insensitive
+  * `rfc6750` is about the Bearer Token Usage, which forces the token type to be an exact match
 * `function auth (key, req) {}` : this function will test if `key` is a valid token.
    The function must return a literal `true` if the key is accepted or a literal
    `false` if rejected. The function may also return a promise that resolves to
