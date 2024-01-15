@@ -7,7 +7,7 @@
 *@fastify/bearer-auth* provides a simple request hook for the [Fastify][fastify]
 web framework.
 
-[fastify]: https://fastify.io/
+[fastify]: https://fastify.dev/
 
 ## Example
 
