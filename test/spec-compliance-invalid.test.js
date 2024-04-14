@@ -11,5 +11,5 @@ test('throws FST_BEARER_AUTH_INVALID_SPEC when invalid value for specCompliance 
 
   const fastify = Fastify()
 
-  t.rejects(() => fastify.register(plugin, { keys: new Set(['123456']), specCompliance: 'invalid' }), new FST_BEARER_AUTH_INVALID_SPEC())
+  t.rejects(async () => fastify.register(plugin, { keys: new Set(['123456']), specCompliance: 'invalid' }), new FST_BEARER_AUTH_INVALID_SPEC())
 })

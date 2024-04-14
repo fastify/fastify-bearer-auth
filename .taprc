@@ -1,4 +1,2 @@
-check-coverage: true
-
 files:
   - test/**/*.test.js
