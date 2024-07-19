@@ -5,7 +5,7 @@ const verifyBearerAuthFactory = require('./lib/verify-bearer-auth-factory')
 const { FST_BEARER_AUTH_INVALID_LOG_LEVEL } = require('./lib/errors')
 
 function fastifyBearerAuth (fastify, options, done) {
-  options = Object.assign({ addHook: true, verifyErrorLogLevel: 'error' }, options)
+  options = {addHook: true, verifyErrorLogLevel: 'error', ...options}
 
   if (
     Object.prototype.hasOwnProperty.call(fastify.log, 'error') === false ||
