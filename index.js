@@ -39,7 +39,7 @@ function fastifyBearerAuth (fastify, options, done) {
 }
 
 module.exports = fp(fastifyBearerAuth, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: '@fastify/bearer-auth'
 })
 module.exports.default = fastifyBearerAuth
