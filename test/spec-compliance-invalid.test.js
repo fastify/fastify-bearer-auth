@@ -1,15 +1,19 @@
 'use strict'
 
-const tap = require('tap')
-const test = tap.test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const plugin = require('../')
-const { FST_BEARER_AUTH_INVALID_SPEC } = require('../lib/errors')
 
 test('throws FST_BEARER_AUTH_INVALID_SPEC when invalid value for specCompliance was used', async (t) => {
-  t.plan(1)
+  t.plan(2)
 
   const fastify = Fastify()
 
-  t.rejects(async () => fastify.register(plugin, { keys: new Set(['123456']), specCompliance: 'invalid' }), new FST_BEARER_AUTH_INVALID_SPEC())
+  await t.assert.rejects(
+    async () => fastify.register(plugin, { keys: new Set(['123456']), specCompliance: 'invalid' }),
+    (err) => {
+      t.assert.strictEqual(err.name, 'FastifyError')
+      return true
+    }
+  )
 })

@@ -1,6 +1,6 @@
 'use strict'
 
-const test = require('tap').test
+const { test } = require('node:test')
 const noop = () => { }
 const verifyBearerAuthFactory = require('../lib/verify-bearer-auth-factory')
 const key = '123456789012354579814'
@@ -19,8 +19,8 @@ test('hook rejects for missing header', (t) => {
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /missing authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'missing authorization header')
   }
 
   const hook = verifyBearerAuthFactory()
@@ -41,14 +41,14 @@ test('hook rejects for missing header with custom content type', (t) => {
     send
   }
   function header (key, value) {
-    t.ok(key)
-    t.ok(value)
-    t.equal(key, 'content-type')
-    t.equal(value, CUSTOM_CONTENT_TYPE)
+    t.assert.ok(key)
+    t.assert.ok(value)
+    t.assert.strictEqual(key, 'content-type')
+    t.assert.strictEqual(value, CUSTOM_CONTENT_TYPE)
   }
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /missing authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'missing authorization header')
   }
 
   const hook = verifyBearerAuthFactory({ contentType: CUSTOM_CONTENT_TYPE })
@@ -68,8 +68,8 @@ test('hook rejects for wrong bearer type but same string length as `bearer`', (t
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory()
@@ -89,8 +89,8 @@ test('hook rejects for wrong bearer type', (t) => {
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory()
@@ -114,8 +114,8 @@ test('hook rejects for wrong alternate Bearer', (t) => {
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory(keysAlt)
@@ -137,8 +137,8 @@ test('hook rejects header without bearer prefix', (t) => {
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory(keys)
@@ -160,8 +160,8 @@ test('hook rejects malformed header', (t) => {
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory(keys)
@@ -183,12 +183,12 @@ test('hook accepts correct header', (t) => {
   }
 
   function send (body) {
-    t.fail('should not happen')
+    t.assert.ifError(body)
   }
 
   const hook = verifyBearerAuthFactory(keys)
   hook(request, response, () => {
-    t.pass()
+    t.assert.ok(true)
   })
 })
 
@@ -209,12 +209,12 @@ test('hook accepts correct header and alternate Bearer', (t) => {
   }
 
   function send (body) {
-    t.fail('should not happen')
+    t.assert.ifError(body)
   }
 
   const hook = verifyBearerAuthFactory(keysAlt)
   hook(request, response, () => {
-    t.pass()
+    t.assert.ok(true)
   })
 })
 
@@ -233,8 +233,8 @@ test('hook throws if header misses at least one space after bearerType', (t) => 
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory(keys)
@@ -256,19 +256,19 @@ test('hook accepts correct header with extra padding', (t) => {
   }
 
   function send (body) {
-    t.fail('should not happen')
+    t.assert.ifError(body)
   }
 
   const hook = verifyBearerAuthFactory(keys)
   hook(request, response, () => {
-    t.pass()
+    t.assert.ok(true)
   })
 })
 
 test('hook accepts correct header with auth function (promise)', (t) => {
   t.plan(2)
   const auth = function (val) {
-    t.equal(val, key, 'wrong argument')
+    t.assert.strictEqual(val, key, 'wrong argument')
     return Promise.resolve(true)
   }
   const request = {
@@ -283,19 +283,19 @@ test('hook accepts correct header with auth function (promise)', (t) => {
   }
 
   function send (body) {
-    t.fail('should not happen')
+    t.assert.ifError('should not happen')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
-    t.pass()
+    t.assert.ok(true)
   })
 })
 
 test('hook accepts correct header with auth function (non-promise)', (t) => {
   t.plan(2)
   const auth = function (val) {
-    t.equal(val, key, 'wrong argument')
+    t.assert.strictEqual(val, key, 'wrong argument')
     return true
   }
   const request = {
@@ -310,12 +310,12 @@ test('hook accepts correct header with auth function (non-promise)', (t) => {
   }
 
   function send (body) {
-    t.fail('should not happen')
+    t.assert.ifError('should not happen')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
-    t.pass()
+    t.assert.ok(true)
   })
 })
 
@@ -334,13 +334,13 @@ test('hook rejects wrong token with keys', (t) => {
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory(keys)
   hook(request, response, () => {
-    t.fail('should not accept')
+    t.assert.ifError('should not accept')
   })
 })
 
@@ -360,14 +360,14 @@ test('hook rejects wrong token with custom content type', (t) => {
     send
   }
   function header (key, value) {
-    t.ok(key)
-    t.ok(value)
-    t.equal(key, 'content-type')
-    t.equal(value, CUSTOM_CONTENT_TYPE)
+    t.assert.ok(key)
+    t.assert.ok(value)
+    t.assert.strictEqual(key, 'content-type')
+    t.assert.strictEqual(value, CUSTOM_CONTENT_TYPE)
   }
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory({ ...keys, contentType: CUSTOM_CONTENT_TYPE })
@@ -385,22 +385,22 @@ test('hook rejects wrong token with auth function', (t) => {
   }
 
   const auth = function (val, req) {
-    t.equal(req, request)
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(req, request)
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return false
   }
 
   const response = {
     code: (status) => {
-      t.equal(401, status)
+      t.assert.strictEqual(401, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
@@ -413,7 +413,7 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return Promise.resolve(false)
   }
 
@@ -425,15 +425,15 @@ test('hook rejects wrong token with function (resolved promise)', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(401, status)
+      t.assert.strictEqual(401, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /invalid authorization header/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'invalid authorization header')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
@@ -446,7 +446,7 @@ test('hook rejects with 500 when functions fails', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     throw Error('failing')
   }
 
@@ -458,15 +458,15 @@ test('hook rejects with 500 when functions fails', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /failing/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'failing')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
@@ -479,7 +479,7 @@ test('hook rejects with 500 when promise rejects', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return Promise.reject(Error('failing'))
   }
 
@@ -491,20 +491,20 @@ test('hook rejects with 500 when promise rejects', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /failing/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'failing')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
-    t.fail('should not accept')
+    t.assert.ifError('should not accept')
   })
 })
 
@@ -512,7 +512,7 @@ test('hook rejects with 500 when promise rejects with non Error', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return Promise.reject('failing') // eslint-disable-line
   }
 
@@ -524,20 +524,20 @@ test('hook rejects with 500 when promise rejects with non Error', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /failing/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'failing')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
-    t.fail('should not accept')
+    t.assert.ifError('should not accept')
   })
 })
 
@@ -552,21 +552,21 @@ test('hook returns proper error for valid key but failing callback', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /foo!/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'foo!')
   }
 
   const hook = verifyBearerAuthFactory(keys)
   hook(request, response, (err) => {
     if (err) {
-      t.pass(err)
+      t.assert.ok(err)
     }
     throw new Error('foo!')
   })
@@ -576,7 +576,7 @@ test('hook rejects with 500 when functions returns non-boolean', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return 'foobar'
   }
 
@@ -588,20 +588,20 @@ test('hook rejects with 500 when functions returns non-boolean', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /internal server error/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'internal server error')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
-    t.fail('should not accept')
+    t.assert.ifError('should not accept')
   })
 })
 
@@ -609,7 +609,7 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return Promise.resolve('abcde')
   }
 
@@ -621,20 +621,20 @@ test('hook rejects with 500 when promise resolves to non-boolean', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     },
     send
   }
 
   function send (body) {
-    t.ok(body.error)
-    t.match(body.error, /internal server error/)
+    t.assert.ok(body.error)
+    t.assert.strictEqual(body.error, 'internal server error')
   }
 
   const hook = verifyBearerAuthFactory({ auth })
   hook(request, response, () => {
-    t.fail('should not accept')
+    t.assert.ifError('should not accept')
   })
 })
 
@@ -642,7 +642,7 @@ test('hook rejects with 500 when functions returns non-boolean (addHook: false)'
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return 'foobar'
   }
 
@@ -654,15 +654,15 @@ test('hook rejects with 500 when functions returns non-boolean (addHook: false)'
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     }
   }
 
   const hook = verifyBearerAuthFactory({ auth, addHook: false })
   hook(request, response, (err) => {
-    t.ok(err)
-    t.match(err.message, /internal server error/)
+    t.assert.ok(err)
+    t.assert.strictEqual(err.message, 'internal server error')
   })
 })
 
@@ -670,7 +670,7 @@ test('hook rejects with 500 when promise rejects (addHook: false)', (t) => {
   t.plan(4)
 
   const auth = function (val) {
-    t.equal(val, 'abcdefg', 'wrong argument')
+    t.assert.strictEqual(val, 'abcdefg', 'wrong argument')
     return Promise.reject(Error('failing'))
   }
 
@@ -682,15 +682,15 @@ test('hook rejects with 500 when promise rejects (addHook: false)', (t) => {
   }
   const response = {
     code: (status) => {
-      t.equal(500, status)
+      t.assert.strictEqual(500, status)
       return response
     }
   }
 
   const hook = verifyBearerAuthFactory({ auth, addHook: false })
   hook(request, response, (err) => {
-    t.ok(err)
-    t.match(err.message, /failing/)
+    t.assert.ok(err)
+    t.assert.strictEqual(err.message, 'failing')
   })
 })
 
@@ -709,17 +709,17 @@ test('options.keys can be an Array', (t) => {
   }
 
   function send (body) {
-    t.fail('should not happen')
+    t.assert.ifError(body)
   }
 
   const hook = verifyBearerAuthFactory({ keys: [key] })
   hook(request, response, () => {
-    t.pass()
+    t.assert.ok(true)
   })
 })
 
 test('options.keys throws if not an Array and not a Set', (t) => {
   t.plan(1)
 
-  t.throws(() => verifyBearerAuthFactory({ keys: true }))
+  t.assert.throws(() => verifyBearerAuthFactory({ keys: true }))
 })

@@ -1,7 +1,6 @@
 'use strict'
 
-const tap = require('tap')
-const test = tap.test
+const { test } = require('node:test')
 const fastify = require('fastify')()
 const plugin = require('../')
 
@@ -11,67 +10,53 @@ fastify.get('/test', (req, res) => {
   res.send({ hello: 'world' })
 })
 
-test('success route succeeds', (t) => {
+test('success route succeeds', async (t) => {
   t.plan(2)
-  fastify.inject({
+  const response = await fastify.inject({
     method: 'GET',
     url: '/test',
     headers: {
       authorization: 'Bearer 123456'
     }
-  }).then(response => {
-    t.equal(response.statusCode, 200)
-    t.same(JSON.parse(response.body), { hello: 'world' })
-  }).catch(err => {
-    t.error(err)
   })
+  t.assert.strictEqual(response.statusCode, 200)
+  t.assert.deepStrictEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
-test('invalid key route fails correctly', (t) => {
+test('invalid key route fails correctly', async (t) => {
   t.plan(2)
-  fastify.inject({
+  const response = await fastify.inject({
     method: 'GET',
     url: '/test',
     headers: {
       authorization: 'Bearer 987654'
     }
-  }).then(response => {
-    t.equal(response.statusCode, 401)
-    t.match(JSON.parse(response.body).error, /invalid authorization header/)
-  }).catch(err => {
-    t.error(err)
   })
+  t.assert.strictEqual(response.statusCode, 401)
+  t.assert.strictEqual(JSON.parse(response.body).error, 'invalid authorization header')
 })
 
-test('missing space between bearerType and key fails correctly', (t) => {
+test('missing space between bearerType and key fails correctly', async (t) => {
   t.plan(2)
-  fastify.inject({
+  const response = await fastify.inject({
     method: 'GET',
     url: '/test',
     headers: {
       authorization: 'Bearer123456'
     }
-  }).then(response => {
-    t.equal(response.statusCode, 401)
-    t.match(JSON.parse(response.body).error, /invalid authorization header/)
-  }).catch(err => {
-    t.error(err)
   })
+  t.assert.strictEqual(response.statusCode, 401)
+  t.assert.strictEqual(JSON.parse(response.body).error, 'invalid authorization header')
 })
 
-test('missing header route fails correctly', (t) => {
+test('missing header route fails correctly', async (t) => {
   t.plan(2)
-  fastify.inject({ method: 'GET', url: '/test' }).then(response => {
-    t.equal(response.statusCode, 401)
-    t.match(JSON.parse(response.body).error, /missing authorization header/)
-  }).catch(err => {
-    t.error(err)
-  })
+  const response = await fastify.inject({ method: 'GET', url: '/test' })
+  t.assert.strictEqual(response.statusCode, 401)
+  t.assert.strictEqual(JSON.parse(response.body).error, 'missing authorization header')
 })
 
 test('integration with @fastify/auth', async (t) => {
-  t.plan(3)
-
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
   fastify.decorate('allowAnonymous', function (request, _, done) {
@@ -96,14 +81,14 @@ test('integration with @fastify/auth', async (t) => {
 
   await fastify.ready()
 
-  t.test('anonymous should pass', async (t) => {
+  await test('anonymous should pass', async (t) => {
     t.plan(2)
     const res = await fastify.inject({ method: 'GET', url: '/anonymous' })
-    t.equal(res.statusCode, 200)
-    t.match(JSON.parse(res.body).hello, 'world')
+    t.assert.strictEqual(res.statusCode, 200)
+    t.assert.strictEqual(JSON.parse(res.body).hello, 'world')
   })
 
-  t.test('bearer auth should pass', async (t) => {
+  await test('bearer auth should pass', async (t) => {
     t.plan(2)
     const res = await fastify.inject({
       method: 'GET',
@@ -112,11 +97,11 @@ test('integration with @fastify/auth', async (t) => {
         authorization: 'Bearer 123456'
       }
     })
-    t.equal(res.statusCode, 200)
-    t.match(JSON.parse(res.body).hello, 'world')
+    t.assert.strictEqual(res.statusCode, 200)
+    t.assert.strictEqual(JSON.parse(res.body).hello, 'world')
   })
 
-  t.test('bearer auth should fail, so fastify.auth fails', async (t) => {
+  await test('bearer auth should fail, so fastify.auth fails', async (t) => {
     t.plan(2)
     const res = await fastify.inject({
       method: 'GET',
@@ -125,14 +110,12 @@ test('integration with @fastify/auth', async (t) => {
         authorization: 'Bearer fail'
       }
     })
-    t.equal(res.statusCode, 401)
-    t.match(JSON.parse(res.body).error, /Unauthorized/)
+    t.assert.strictEqual(res.statusCode, 401)
+    t.assert.strictEqual(JSON.parse(res.body).error, 'Unauthorized')
   })
 })
 
 test('integration with @fastify/auth; not the last auth option', async (t) => {
-  t.plan(3)
-
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
   fastify.decorate('alwaysValidAuth', function (request, _, done) {
@@ -154,7 +137,7 @@ test('integration with @fastify/auth; not the last auth option', async (t) => {
 
   await fastify.ready()
 
-  t.test('bearer auth should pass so fastify.auth should pass', async (t) => {
+  await test('bearer auth should pass so fastify.auth should pass', async (t) => {
     t.plan(2)
     const res = await fastify.inject({
       method: 'GET',
@@ -163,11 +146,11 @@ test('integration with @fastify/auth; not the last auth option', async (t) => {
         authorization: 'Bearer 123456'
       }
     })
-    t.equal(res.statusCode, 200)
-    t.match(JSON.parse(res.body).hello, 'world')
+    t.assert.strictEqual(res.statusCode, 200)
+    t.assert.strictEqual(JSON.parse(res.body).hello, 'world')
   })
 
-  t.test('bearer should fail but fastify.auth should pass', async (t) => {
+  await test('bearer should fail but fastify.auth should pass', async (t) => {
     t.plan(2)
     const res = await fastify.inject({
       method: 'GET',
@@ -176,18 +159,18 @@ test('integration with @fastify/auth; not the last auth option', async (t) => {
         authorization: 'Bearer fail'
       }
     })
-    t.equal(res.statusCode, 200)
-    t.match(JSON.parse(res.body).hello, 'world')
+    t.assert.strictEqual(res.statusCode, 200)
+    t.assert.strictEqual(JSON.parse(res.body).hello, 'world')
   })
 
-  t.test('bearer should fail but fastify.auth should pass', async (t) => {
+  await test('bearer should fail but fastify.auth should pass', async (t) => {
     t.plan(2)
     const res = await fastify.inject({
       method: 'GET',
       url: '/bearer-first',
       headers: {}
     })
-    t.equal(res.statusCode, 200)
-    t.match(JSON.parse(res.body).hello, 'world')
+    t.assert.strictEqual(res.statusCode, 200)
+    t.assert.strictEqual(JSON.parse(res.body).hello, 'world')
   })
 })

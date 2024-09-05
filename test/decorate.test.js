@@ -1,30 +1,32 @@
 'use strict'
 
-const tap = require('tap')
-const test = tap.test
+const { test } = require('node:test')
 const fastify = require('fastify')()
 const plugin = require('../')
 
 fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
 
-test('verifyBearerAuth', (t) => {
+test('verifyBearerAuth', async (t) => {
   t.plan(1)
-  fastify.ready(() => {
-    t.ok(fastify.verifyBearerAuth)
-  })
+  await fastify.ready()
+  t.assert.ok(fastify.verifyBearerAuth)
 })
 
-test('verifyBearerAuthFactory', (t) => {
+test('verifyBearerAuthFactory', async (t) => {
   t.plan(1)
-  fastify.ready(() => {
-    t.ok(fastify.verifyBearerAuthFactory)
-  })
+  await fastify.ready()
+  t.assert.ok(fastify.verifyBearerAuthFactory)
 })
 
-test('verifyBearerAuthFactory', (t) => {
-  t.plan(1)
-  fastify.ready(() => {
-    const keys = { keys: new Set([123456]) }
-    t.throws(() => fastify.verifyBearerAuthFactory(keys), /keys has to contain only string entries/)
-  })
+test('verifyBearerAuthFactory', async (t) => {
+  t.plan(2)
+  await fastify.ready()
+  const keys = { keys: new Set([123456]) }
+  await t.assert.rejects(
+    async () => fastify.verifyBearerAuthFactory(keys),
+    (err) => {
+      t.assert.strictEqual(err.message, 'options.keys has to contain only string entries')
+      return true
+    }
+  )
 })
