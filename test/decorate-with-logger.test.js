@@ -1,6 +1,6 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const stream = require('node:stream')
 const Fastify = require('fastify')
 const plugin = require('..')
@@ -29,8 +29,8 @@ test('verifyBearerAuth with debug log', async (t) => {
 
   await fastify.ready()
 
-  t.ok(fastify.verifyBearerAuth)
-  t.ok(fastify.verifyBearerAuthFactory)
+  t.assert.ok(fastify.verifyBearerAuth)
+  t.assert.ok(fastify.verifyBearerAuthFactory)
 
   const response = await fastify.inject({
     method: 'GET',
@@ -43,10 +43,10 @@ test('verifyBearerAuth with debug log', async (t) => {
   // Debug level is equal to 20 so we search for an entry with a level of 20
   const failure = logs.find((entry) => entry.level && entry.level === 20)
 
-  t.equal(failure.level, 20)
-  t.equal(failure.msg, 'unauthorized: invalid authorization header')
+  t.assert.strictEqual(failure.level, 20)
+  t.assert.strictEqual(failure.msg, 'unauthorized: invalid authorization header')
 
-  t.equal(response.statusCode, 401)
+  t.assert.strictEqual(response.statusCode, 401)
 })
 
 test('register with invalid log level', async (t) => {
@@ -58,6 +58,6 @@ test('register with invalid log level', async (t) => {
   try {
     await fastify.register(plugin, { addHook: false, keys: new Set(['123456']), verifyErrorLogLevel: invalidLogLevel })
   } catch (err) {
-    t.equal(err.message, `fastify.log does not have level '${invalidLogLevel}'`)
+    t.assert.strictEqual(err.message, `fastify.log does not have level '${invalidLogLevel}'`)
   }
 })

@@ -1,7 +1,6 @@
 'use strict'
 
-const tap = require('tap')
-const test = tap.test
+const { test } = require('node:test')
 const fastify = require('fastify')()
 const plugin = require('../')
 
@@ -22,8 +21,8 @@ test('bearerType starting with capital letter', async (t) => {
     }
   })
 
-  t.equal(response.statusCode, 200)
-  t.same(JSON.parse(response.body), { hello: 'world' })
+  t.assert.strictEqual(response.statusCode, 200)
+  t.assert.deepStrictEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
 test('bearerType all lowercase', async (t) => {
@@ -37,8 +36,8 @@ test('bearerType all lowercase', async (t) => {
     }
   })
 
-  t.equal(response.statusCode, 401)
-  t.match(JSON.parse(response.body).error, /invalid authorization header/)
+  t.assert.strictEqual(response.statusCode, 401)
+  t.assert.strictEqual(JSON.parse(response.body).error, 'invalid authorization header')
 })
 
 test('bearerType all uppercase', async (t) => {
@@ -52,8 +51,8 @@ test('bearerType all uppercase', async (t) => {
     }
   })
 
-  t.equal(response.statusCode, 200)
-  t.same(JSON.parse(response.body), { hello: 'world' })
+  t.assert.strictEqual(response.statusCode, 200)
+  t.assert.deepStrictEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
 test('invalid key route fails correctly', async (t) => {
@@ -66,8 +65,8 @@ test('invalid key route fails correctly', async (t) => {
     }
   })
 
-  t.equal(response.statusCode, 401)
-  t.match(JSON.parse(response.body).error, /invalid authorization header/)
+  t.assert.strictEqual(response.statusCode, 401)
+  t.assert.strictEqual(JSON.parse(response.body).error, 'invalid authorization header')
 })
 
 test('missing space between bearerType and key fails correctly', async (t) => {
@@ -80,6 +79,6 @@ test('missing space between bearerType and key fails correctly', async (t) => {
       authorization: 'bearer123456'
     }
   })
-  t.equal(response.statusCode, 401)
-  t.match(JSON.parse(response.body).error, /invalid authorization header/)
+  t.assert.strictEqual(response.statusCode, 401)
+  t.assert.strictEqual(JSON.parse(response.body).error, 'invalid authorization header')
 })
