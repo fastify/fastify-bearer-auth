@@ -8,7 +8,7 @@ function fastifyBearerAuth (fastify, options, done) {
   options = { addHook: true, verifyErrorLogLevel: 'error', ...options }
 
   if (
-    Object.prototype.hasOwnProperty.call(fastify.log, 'error') === false ||
+    Object.hasOwn(fastify.log, 'error') === false ||
     typeof fastify.log.error !== 'function'
   ) {
     options.verifyErrorLogLevel = null
@@ -18,7 +18,7 @@ function fastifyBearerAuth (fastify, options, done) {
     options.verifyErrorLogLevel != null &&
     (
       typeof options.verifyErrorLogLevel !== 'string' ||
-      Object.prototype.hasOwnProperty.call(fastify.log, options.verifyErrorLogLevel) === false ||
+      Object.hasOwn(fastify.log, options.verifyErrorLogLevel) === false ||
       typeof fastify.log[options.verifyErrorLogLevel] !== 'function'
     )
   ) {
