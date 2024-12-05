@@ -32,5 +32,5 @@ declare namespace fastifyBearerAuth {
   export { fastifyBearerAuth as default }
 }
 
-declare function fastifyBearerAuth(...params: Parameters<FastifyBearerAuth>): ReturnType<FastifyBearerAuth>
+declare function fastifyBearerAuth (...params: Parameters<FastifyBearerAuth>): ReturnType<FastifyBearerAuth>
 export = fastifyBearerAuth
