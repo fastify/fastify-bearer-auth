@@ -41,6 +41,15 @@ expectAssignable<{
   errorResponse?: (err: Error) => { error: string };
   contentType?: string;
   bearerType?: string;
+  addHook?: boolean;
+}>(pluginOptionsKeyArray)
+
+expectAssignable<{
+  keys: Set<string> | string[];
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  errorResponse?: (err: Error) => { error: string };
+  contentType?: string;
+  bearerType?: string;
 }>(pluginOptionsAuthPromise)
 
 expectAssignable<{
@@ -50,11 +59,12 @@ expectAssignable<{
   contentType?: string;
   bearerType?: string;
   specCompliance?: 'rfc6749' | 'rfc6750';
-  verifyErrorLogLevel? : string;
+  verifyErrorLogLevel?: string;
 }>(pluginOptionsAuthPromise)
 
 fastify().register(bearerAuth, pluginOptions)
 fastify().register(bearerAuth, pluginOptionsAuthPromise)
+fastify().register(bearerAuth, pluginOptionsKeyArray)
 
 expectType<verifyBearerAuth | undefined>(fastify().verifyBearerAuth)
 expectType<verifyBearerAuthFactory | undefined>(fastify().verifyBearerAuthFactory)

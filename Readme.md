@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/fastify/fastify-bearer-auth/workflows/CI/badge.svg)
 [![npm version](https://img.shields.io/npm/v/@fastify/bearer-auth)](https://www.npmjs.com/package/@fastify/bearer-auth)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
+[![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
 *@fastify/bearer-auth* provides a simple request hook for the [Fastify][fastify]
 web framework.
