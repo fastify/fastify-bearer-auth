@@ -9,6 +9,26 @@ web framework.
 
 [fastify]: https://fastify.dev/
 
+
+## Install
+```
+npm i @fastify/bearer-auth
+```
+
+### Compatibility
+| Plugin version | Fastify version |
+| ---------------|-----------------|
+| `^10.x`        | `^5.x`          |
+| `^8.x`         | `^4.x`          |
+| `^5.x`         | `^3.x`          |
+| `^5.x`         | `^2.x`          |
+| `^1.x`         | `^1.x`          |
+
+
+Please note that if a Fastify version is out of support, then so are the corresponding version(s) of this plugin
+in the table above.
+See [Fastify's LTS policy](https://github.com/fastify/fastify/blob/main/docs/Reference/LTS.md) for more details.
+
 ## Example
 
 ```js
@@ -139,6 +159,7 @@ immediately replying on error (`reply.send(someError)`), invokes `done(someError
 will allow `fastify.auth` to continue with the next authentication scheme in the hook list.
 Note that by setting `{ verifyErrorLogLevel: 'debug' }` in the options, `@fastify/bearer-auth` will emit all verification error logs at the `debug` level. Since it is not the only authentication method here, emitting verification error logs at the `error` level may be not appropriate here.
 If `verifyBearerAuth` is the last hook in the list, `fastify.auth` will reply with `Unauthorized`.
+
 ## License
 
-[MIT License](https://jsumners.mit-license.org/)
+Licensed under [MIT](./LICENSE).
