@@ -6,7 +6,7 @@ const bearerAuthPlugin = require('..')
 const keys = new Set(['key'])
 
 fastify.register(bearerAuthPlugin, { keys })
-fastify.get('/foo', (req, reply) => {
+fastify.get('/foo', (_req, reply) => {
   reply.send({ authenticated: true })
 })
 

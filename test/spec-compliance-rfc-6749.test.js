@@ -6,7 +6,7 @@ const plugin = require('../')
 
 fastify.register(plugin, { keys: new Set(['123456']), specCompliance: 'rfc6749' })
 
-fastify.get('/test', (req, res) => {
+fastify.get('/test', (_req, res) => {
   res.send({ hello: 'world' })
 })
 

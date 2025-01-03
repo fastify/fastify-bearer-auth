@@ -282,7 +282,7 @@ test('hook accepts correct header with auth function (promise)', (t) => {
     send
   }
 
-  function send (body) {
+  function send (_body) {
     t.assert.ifError('should not happen')
   }
 
@@ -309,7 +309,7 @@ test('hook accepts correct header with auth function (non-promise)', (t) => {
     send
   }
 
-  function send (body) {
+  function send (_body) {
     t.assert.ifError('should not happen')
   }
 

@@ -10,7 +10,7 @@ test('verifyBearerAuth with debug log', async (t) => {
 
   const logs = []
   const destination = new stream.Writable({
-    write: function (chunk, encoding, next) {
+    write: function (chunk, _encoding, next) {
       logs.push(JSON.parse(chunk))
       next()
     }
@@ -23,7 +23,7 @@ test('verifyBearerAuth with debug log', async (t) => {
     onRequest: [
       fastify.verifyBearerAuth
     ]
-  }, async (request, reply) => {
+  }, async (_request, _reply) => {
     return { message: 'ok' }
   })
 
