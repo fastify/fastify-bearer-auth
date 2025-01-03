@@ -4,7 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/@fastify/bearer-auth)](https://www.npmjs.com/package/@fastify/bearer-auth)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
-*@fastify/bearer-auth* provides a simple request hook for the [Fastify][fastify]
+*@fastify/bearer-auth* provides a simple Bearer auth request hook for the [Fastify][fastify]
 web framework.
 
 [fastify]: https://fastify.dev/
@@ -56,7 +56,7 @@ fastify.listen({port: 8000}, (err) => {
 
 *@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin). This allows
 you to register the plugin within scoped paths. Therefore, you could have some
-paths that are not protected by the plugin and others that are. See the [Fastify](https://fastify.dev/docs/latest)
+paths not protected by the plugin and others that are. See the [Fastify](https://fastify.dev/docs/latest)
 documentation and examples for more details.
 
 When registering the plugin you must specify a configuration object:
@@ -78,14 +78,14 @@ Defaults to `rfc6750`.
    The function must return a literal `true` if the key is accepted or a literal
    `false` if rejected. The function may also return a promise that resolves to
    one of these values. If the function returns or resolves to any other value,
-   rejects, or throws, a HTTP status of `500` will be sent. `req` is the Fastify
+   rejects, or throws, an HTTP status of `500` will be sent. `req` is the Fastify
    request object. If `auth` is a function, `keys` will be ignored. If `auth` is
    not a function, or `undefined`, `keys` will be used.
 * `addHook`: If `false`, this plugin will not register `onRequest` hook automatically,
-   instead it provide two decorations `fastify.verifyBearerAuth` and
+   instead it provides two decorations `fastify.verifyBearerAuth` and
    `fastify.verifyBearerAuthFactory` for you.
 * `verifyErrorLogLevel`: An optional string specifying the log level when there is a verification error.
-   It must be a valid log level supported by fastify, otherwise an exception will be thrown
+   It must be a valid log level supported by fastify, otherwise, an exception will be thrown
    when registering the plugin. By default, this option is set to `error`.
 
 The default configuration object is:
@@ -111,8 +111,8 @@ object via a [constant time algorithm](https://en.wikipedia.org/wiki/Time_comple
 malformed, or the `key` does not validate then a 401 response will be sent with
 a `{error: message}` body; no further request processing will be performed.
 
-[fplugin]: https://github.com/fastify/fastify/blob/master/docs/Plugins.md
-[prehook]: https://github.com/fastify/fastify/blob/master/docs/Hooks.md
+[fplugin]: https://github.com/fastify/fastify/blob/main/docs/Reference/Plugins.md
+[prehook]: https://github.com/fastify/fastify/blob/main/docs/Reference/Hooks.md
 
 ## Integration with `@fastify/auth`
 
