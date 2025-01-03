@@ -6,7 +6,7 @@ const plugin = require('../')
 
 fastify.register(plugin, { keys: new Set(['123456']) })
 
-fastify.get('/test', (req, res) => {
+fastify.get('/test', (_req, res) => {
   res.send({ hello: 'world' })
 })
 
@@ -56,7 +56,7 @@ test('missing header route fails correctly', async (t) => {
   t.assert.strictEqual(JSON.parse(response.body).error, 'missing authorization header')
 })
 
-test('integration with @fastify/auth', async (t) => {
+test('integration with @fastify/auth', async () => {
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
   fastify.decorate('allowAnonymous', function (request, _, done) {
@@ -115,10 +115,10 @@ test('integration with @fastify/auth', async (t) => {
   })
 })
 
-test('integration with @fastify/auth; not the last auth option', async (t) => {
+test('integration with @fastify/auth; not the last auth option', async () => {
   const fastify = require('fastify')()
   await fastify.register(plugin, { addHook: false, keys: new Set(['123456']) })
-  fastify.decorate('alwaysValidAuth', function (request, _, done) {
+  fastify.decorate('alwaysValidAuth', function (_request, _, done) {
     return done()
   })
   await fastify.register(require('@fastify/auth'))

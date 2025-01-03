@@ -4,7 +4,7 @@ import bearerAuth, { FastifyBearerAuthOptions, verifyBearerAuth, verifyBearerAut
 
 const pluginOptions: FastifyBearerAuthOptions = {
   keys: new Set(['foo']),
-  auth: (key: string, req: FastifyRequest) => { return true },
+  auth: (_key: string, _req: FastifyRequest) => { return true },
   errorResponse: (err: Error) => { return { error: err.message } },
   contentType: '',
   bearerType: '',
@@ -13,7 +13,7 @@ const pluginOptions: FastifyBearerAuthOptions = {
 
 const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
   keys: new Set(['foo']),
-  auth: (key: string, req: FastifyRequest) => { return Promise.resolve(true) },
+  auth: (_key: string, _req: FastifyRequest) => { return Promise.resolve(true) },
   errorResponse: (err: Error) => { return { error: err.message } },
   contentType: '',
   bearerType: ''
@@ -21,7 +21,7 @@ const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
 
 const pluginOptionsKeyArray: FastifyBearerAuthOptions = {
   keys: ['foo'],
-  auth: (key: string, req: FastifyRequest) => { return Promise.resolve(true) },
+  auth: (_key: string, _req: FastifyRequest) => { return Promise.resolve(true) },
   errorResponse: (err: Error) => { return { error: err.message } },
   contentType: '',
   bearerType: ''
