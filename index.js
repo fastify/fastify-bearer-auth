@@ -27,7 +27,7 @@ function fastifyBearerAuth (fastify, options, done) {
 
   try {
     if (options.addHook === true) {
-      fastify.addHook('onRequest', verifyBearerAuthFactory(options))
+      fastify.addHook('preHandler', verifyBearerAuthFactory(options))
     } else {
       fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
       fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
