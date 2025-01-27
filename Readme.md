@@ -54,19 +54,19 @@ fastify.listen({port: 8000}, (err) => {
 
 ## API
 
-*@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin). This allows
-you to register the plugin within scoped paths. Therefore, you could have some
-paths not protected by the plugin and others that are. See the [Fastify](https://fastify.dev/docs/latest)
+*@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin).
+This allows registering the plugin within scoped paths, so some paths can be protected
+by the plugin while others are not. See the [Fastify](https://fastify.dev/docs/latest)
 documentation and examples for more details.
 
 When registering the plugin you must specify a configuration object:
 
 * `keys`: A `Set` or array with valid keys of type `string` (required)
-* `function errorResponse (err) {}`: method must synchronously return the content body to be
+* `function errorResponse (err) {}`: Method must synchronously return the content body to be
 sent to the client (optional)
 * `contentType`: If the content to be sent is anything other than
 `application/json`, then the `contentType` property must be set (optional)
-* `bearerType`: string specifying the Bearer string (optional)
+* `bearerType`: String specifying the Bearer string (optional)
 * `specCompliance`:
 Plugin spec compliance. Accepts either
 [`rfc6749`](https://datatracker.ietf.org/doc/html/rfc6749) or
@@ -74,19 +74,17 @@ Plugin spec compliance. Accepts either
 Defaults to `rfc6750`.
   * `rfc6749` is about the generic OAuth2.0 protocol, which allows the token type to be case-insensitive
   * `rfc6750` is about the Bearer Token Usage, which forces the token type to be an exact match
-* `function auth (key, req) {}` : this function will test if `key` is a valid token.
-   The function must return a literal `true` if the key is accepted or a literal
-   `false` if rejected. The function may also return a promise that resolves to
-   one of these values. If the function returns or resolves to any other value,
-   rejects, or throws, an HTTP status of `500` will be sent. `req` is the Fastify
-   request object. If `auth` is a function, `keys` will be ignored. If `auth` is
-   not a function, or `undefined`, `keys` will be used.
-* `addHook`: If `false`, this plugin will not register `onRequest` hook automatically,
-   instead it provides two decorations `fastify.verifyBearerAuth` and
-   `fastify.verifyBearerAuthFactory` for you.
-* `verifyErrorLogLevel`: An optional string specifying the log level when there is a verification error.
-   It must be a valid log level supported by fastify, otherwise, an exception will be thrown
-   when registering the plugin. By default, this option is set to `error`.
+* `function auth (key, req) {}` : This function tests if `key` is a valid token. It must return
+  `true` if accepted or `false` if rejected. The function may also return a promise that resolves
+  to one of these values. If the function returns or resolves to any other value, rejects, or throws,
+  an HTTP status of `500` will be sent. `req` is the Fastify request object. If `auth` is a function,
+  `keys` will be ignored. If `auth` is not a function or `undefined`, `keys` will be used
+* `addHook`: If `false`, this plugin will not register `onRequest` hook automatically.
+  Instead it provides two decorations: `fastify.verifyBearerAuth` and
+   `fastify.verifyBearerAuthFactory`
+* `verifyErrorLogLevel`: An optional string specifying the log level for verification errors.
+  It must be a valid log level supported by Fastify, or an exception will be thrown when
+  registering the plugin. By default, this option is set to `error`
 
 The default configuration object is:
 
@@ -104,14 +102,13 @@ The default configuration object is:
 }
 ```
 
-Internally, the plugin registers a standard *Fastify* [preHandler hook][prehook],
-which will inspect the request's headers for an `authorization` header with the
-format `bearer key`. The `key` will be matched against the configured `keys`
-object via a [constant time algorithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time) to prevent against [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the `authorization` header is missing,
-malformed, or the `key` does not validate then a 401 response will be sent with
-a `{error: message}` body; no further request processing will be performed.
+The plugin registers a standard Fastify [preHandler hook][prehook] to inspect the request's
+headers for an `authorization` header in the format `bearer key`. The `key` is matched against
+the configured `keys` object using a [constant time algorithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time)
+to prevent [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the
+`authorization` header is missing, malformed, or the `key` does not validate, a 401 response
+is sent with a `{error: message}` body, and no further request processing is performed.
 
-[fplugin]: https://github.com/fastify/fastify/blob/main/docs/Reference/Plugins.md
 [prehook]: https://github.com/fastify/fastify/blob/main/docs/Reference/Hooks.md
 
 ## Integration with `@fastify/auth`
@@ -154,11 +151,12 @@ async function server() {
 server()
 ```
 
-By passing `{ addHook: false }` in the options, the `verifyBearerAuth` hook, instead of
-immediately replying on error (`reply.send(someError)`), invokes `done(someError)`. This
-will allow `fastify.auth` to continue with the next authentication scheme in the hook list.
-Note that by setting `{ verifyErrorLogLevel: 'debug' }` in the options, `@fastify/bearer-auth` will emit all verification error logs at the `debug` level. Since it is not the only authentication method here, emitting verification error logs at the `error` level may be not appropriate here.
-If `verifyBearerAuth` is the last hook in the list, `fastify.auth` will reply with `Unauthorized`.
+Passing `{ addHook: false }` in the options causes the `verifyBearerAuth` hook to invoke
+`done(someError)` instead of immediately replying on error (`reply.send(someError)`). This allows
+`fastify.auth` to continue with the next authentication scheme in the hook list.
+Setting `{ verifyErrorLogLevel: 'debug' }` in the options makes `@fastify/bearer-auth` emit
+all verification error logs at the `debug` level. If `verifyBearerAuth` is the last hook in the list,
+`fastify.auth` will reply with `Unauthorized`.
 
 ## License
 
