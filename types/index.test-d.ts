@@ -27,36 +27,54 @@ const pluginOptionsKeyArray: FastifyBearerAuthOptions = {
   bearerType: ''
 }
 
+const pluginOptionsUndefined: FastifyBearerAuthOptions = {
+  keys: ['foo'],
+  auth: undefined,
+  errorResponse: (err: Error) => { return { error: err.message } },
+  contentType: undefined,
+  bearerType: undefined,
+  addHook: undefined
+}
+
 expectAssignable<{
   keys: Set<string> | string[];
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
-  contentType?: string;
+  contentType?: string | undefined;
   bearerType?: string;
 }>(pluginOptions)
 
 expectAssignable<{
   keys: Set<string> | string[];
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
-  contentType?: string;
+  contentType?: string | undefined;
   bearerType?: string;
-  addHook?: boolean;
+  addHook?: boolean | undefined;
 }>(pluginOptionsKeyArray)
 
 expectAssignable<{
   keys: Set<string> | string[];
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
-  contentType?: string;
+  contentType?: string | undefined;
+  bearerType?: string;
+  addHook?: boolean | undefined;
+}>(pluginOptionsUndefined)
+
+expectAssignable<{
+  keys: Set<string> | string[];
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
+  errorResponse?: (err: Error) => { error: string };
+  contentType?: string | undefined;
   bearerType?: string;
 }>(pluginOptionsAuthPromise)
 
 expectAssignable<{
   keys: Set<string> | string[];
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
-  contentType?: string;
+  contentType?: string | undefined;
   bearerType?: string;
   specCompliance?: 'rfc6749' | 'rfc6750';
   verifyErrorLogLevel?: string;

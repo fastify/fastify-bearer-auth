@@ -16,12 +16,12 @@ type FastifyBearerAuth = FastifyPluginCallback<fastifyBearerAuth.FastifyBearerAu
 declare namespace fastifyBearerAuth {
   export interface FastifyBearerAuthOptions {
     keys: Set<string> | string[];
-    auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean>;
+    auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
     errorResponse?: (err: Error) => { error: string };
-    contentType?: string;
+    contentType?: string | undefined;
     bearerType?: string;
     specCompliance?: 'rfc6749' | 'rfc6750';
-    addHook?: boolean;
+    addHook?: boolean | undefined;
     verifyErrorLogLevel?: string;
   }
 
