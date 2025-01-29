@@ -59,7 +59,7 @@ This allows registering the plugin within scoped paths, so some paths can be pro
 by the plugin while others are not. See the [Fastify](https://fastify.dev/docs/latest)
 documentation and examples for more details.
 
-When registering the plugin you must specify a configuration object:
+When registering the plugin a configuration object must be specified:
 
 * `keys`: A `Set` or array with valid keys of type `string` (required)
 * `function errorResponse (err) {}`: Method must synchronously return the content body to be
