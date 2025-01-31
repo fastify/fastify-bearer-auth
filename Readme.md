@@ -1,6 +1,6 @@
 # @fastify/bearer-auth
 
-[![CI](https://github.com/fastify/fastify-bearer-auth/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-bearer-auth/actions/workflows/ci.yml)
+[![CI](https://github.com/fastify/fastify-bearer-auth/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fastify-bearer-auth/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@fastify/bearer-auth)](https://www.npmjs.com/package/@fastify/bearer-auth)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
