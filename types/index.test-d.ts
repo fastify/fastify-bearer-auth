@@ -17,7 +17,7 @@ const pluginOptionsAuthPromise: FastifyBearerAuthOptions = {
   errorResponse: (err: Error) => { return { error: err.message } },
   contentType: '',
   bearerType: '',
-  hook: 'onRequest'
+  addHook: 'onRequest'
 }
 
 const pluginOptionsKeyArray: FastifyBearerAuthOptions = {
@@ -34,8 +34,7 @@ const pluginOptionsUndefined: FastifyBearerAuthOptions = {
   errorResponse: (err: Error) => { return { error: err.message } },
   contentType: undefined,
   bearerType: undefined,
-  addHook: undefined,
-  hook: undefined
+  addHook: undefined
 }
 
 expectAssignable<{
@@ -52,7 +51,7 @@ expectAssignable<{
   errorResponse?: (err: Error) => { error: string };
   contentType?: string | undefined;
   bearerType?: string;
-  addHook?: boolean | undefined;
+  addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
 }>(pluginOptionsKeyArray)
 
 expectAssignable<{
@@ -61,8 +60,7 @@ expectAssignable<{
   errorResponse?: (err: Error) => { error: string };
   contentType?: string | undefined;
   bearerType?: string;
-  addHook?: boolean | undefined;
-  hook?: 'onRequest' | 'preParsing' | undefined;
+  addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
 }>(pluginOptionsUndefined)
 
 expectAssignable<{

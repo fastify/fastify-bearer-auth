@@ -11,7 +11,7 @@ const authorization = 'Bearer 123456'
 test('onrequest hook used by default', async (t) => {
   t.plan(9)
   const fastify = Fastify()
-  fastify.register(plugin, { keys, hook: undefined }).get('/test', (_req, res) => {
+  fastify.register(plugin, { keys, addHook: undefined }).get('/test', (_req, res) => {
     res.send({ hello: 'world' })
   })
 
@@ -40,7 +40,7 @@ test('onrequest hook used by default', async (t) => {
 test('preParsing hook used when specified', async (t) => {
   t.plan(9)
   const fastify = Fastify()
-  fastify.register(plugin, { keys, hook: 'preParsing' }).get('/test', (_req, res) => {
+  fastify.register(plugin, { keys, addHook: 'preParsing' }).get('/test', (_req, res) => {
     res.send({ hello: 'world' })
   })
 
@@ -69,7 +69,7 @@ test('preParsing hook used when specified', async (t) => {
 test('onrequest hook used when specified', async (t) => {
   t.plan(9)
   const fastify = Fastify()
-  fastify.register(plugin, { keys, hook: 'onRequest' }).get('/test', (_req, res) => {
+  fastify.register(plugin, { keys, addHook: 'onRequest' }).get('/test', (_req, res) => {
     res.send({ hello: 'world' })
   })
 
@@ -99,8 +99,8 @@ test('error when invalid hook specified', async (t) => {
   t.plan(1)
   const fastify = Fastify()
   try {
-    await fastify.register(plugin, { keys, hook: 'onResponse' })
+    await fastify.register(plugin, { keys, addHook: 'onResponse' })
   } catch (err) {
-    t.assert.strictEqual(err.message, 'options.hook must be either "onRequest" or "preParsing"')
+    t.assert.strictEqual(err.message, 'options.addHook must be either "onRequest" or "preParsing"')
   }
 })

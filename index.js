@@ -11,7 +11,10 @@ const { FST_BEARER_AUTH_INVALID_HOOK, FST_BEARER_AUTH_INVALID_LOG_LEVEL } = requ
 const validHooks = new Set(['onRequest', 'preParsing'])
 
 function fastifyBearerAuth (fastify, options, done) {
-  options = { addHook: true, verifyErrorLogLevel: 'error', ...options }
+  options = { verifyErrorLogLevel: 'error', ...options }
+  if (options.addHook === true || options.addHook == null) {
+    options.addHook = 'onRequest'
+  }
 
   if (
     Object.hasOwn(fastify.log, 'error') === false ||
@@ -32,19 +35,18 @@ function fastifyBearerAuth (fastify, options, done) {
   }
 
   try {
-    if (options.addHook === true) {
-      options.hook ||= 'onRequest'
-      if (!validHooks.has(options.hook)) {
+    if (options.addHook) {
+      if (!validHooks.has(options.addHook)) {
         done(new FST_BEARER_AUTH_INVALID_HOOK())
       }
 
-      if (options.hook === 'preParsing') {
+      if (options.addHook === 'preParsing') {
         const verifyBearerAuth = verifyBearerAuthFactory(options)
         fastify.addHook('preParsing', (request, reply, _payload, done) => {
           verifyBearerAuth(request, reply, done)
         })
       } else {
-        fastify.addHook(options.hook, verifyBearerAuthFactory(options))
+        fastify.addHook(options.addHook, verifyBearerAuthFactory(options))
       }
     } else {
       fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
