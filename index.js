@@ -4,6 +4,10 @@ const fp = require('fastify-plugin')
 const verifyBearerAuthFactory = require('./lib/verify-bearer-auth-factory')
 const { FST_BEARER_AUTH_INVALID_HOOK, FST_BEARER_AUTH_INVALID_LOG_LEVEL } = require('./lib/errors')
 
+/**
+ * Hook type limited to 'onRequest' and 'preParsing' to protect against DoS attacks.
+ * @see {@link https://github.com/fastify/fastify-auth?tab=readme-ov-file#hook-selection | fastify-auth hook selection}
+ */
 const validHooks = new Set(['onRequest', 'preParsing'])
 
 function fastifyBearerAuth (fastify, options, done) {
