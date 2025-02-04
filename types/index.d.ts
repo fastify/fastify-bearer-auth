@@ -22,6 +22,7 @@ declare namespace fastifyBearerAuth {
     bearerType?: string;
     specCompliance?: 'rfc6749' | 'rfc6750';
     addHook?: boolean | undefined;
+    hook?: 'onRequest' | 'preParsing' | undefined;
     verifyErrorLogLevel?: string;
   }
 

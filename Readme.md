@@ -82,6 +82,7 @@ Defaults to `rfc6750`.
 * `addHook`: If `false`, this plugin will not register `onRequest` hook automatically.
   Instead it provides two decorations: `fastify.verifyBearerAuth` and
    `fastify.verifyBearerAuthFactory`
+* `hook`: Specify the hook to register the plugin, accepts `onRequest` or `preParsing`. Defaults to `onRequest` (optional)
 * `verifyErrorLogLevel`: An optional string specifying the log level for verification errors.
   It must be a valid log level supported by Fastify, or an exception will be thrown when
   registering the plugin. By default, this option is set to `error`
@@ -102,14 +103,14 @@ The default configuration object is:
 }
 ```
 
-The plugin registers a standard Fastify [preHandler hook][prehook] to inspect the request's
+The plugin registers a standard Fastify [onRequest hook][onrequesthook] to inspect the request's
 headers for an `authorization` header in the format `bearer key`. The `key` is matched against
 the configured `keys` object using a [constant time algorithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time)
 to prevent [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the
 `authorization` header is missing, malformed, or the `key` does not validate, a 401 response
 is sent with a `{error: message}` body, and no further request processing is performed.
 
-[prehook]: https://github.com/fastify/fastify/blob/main/docs/Reference/Hooks.md
+[onrequesthook]: https://github.com/fastify/fastify/blob/main/docs/Reference/Hooks.md#onrequest
 
 ## Integration with `@fastify/auth`
 
