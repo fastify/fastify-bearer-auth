@@ -66,7 +66,7 @@ test('preParsing hook used when specified', async (t) => {
   t.assert.deepStrictEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
-test('onrequest hook used when specified', async (t) => {
+test('onRequest hook used when specified', async (t) => {
   t.plan(9)
   const fastify = Fastify()
   fastify.register(plugin, { keys, addHook: 'onRequest' }).get('/test', (_req, res) => {
