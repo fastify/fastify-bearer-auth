@@ -8,7 +8,7 @@ const plugin = require('../')
 const keys = new Set(['123456'])
 const authorization = 'Bearer 123456'
 
-test('onrequest hook used by default', async (t) => {
+test('onRequest hook used by default', async (t) => {
   t.plan(9)
   const fastify = Fastify()
   fastify.register(plugin, { keys, addHook: undefined }).get('/test', (_req, res) => {
