@@ -79,8 +79,10 @@ Defaults to `rfc6750`.
   to one of these values. If the function returns or resolves to any other value, rejects, or throws,
   an HTTP status of `500` will be sent. `req` is the Fastify request object. If `auth` is a function,
   `keys` will be ignored. If `auth` is not a function or `undefined`, `keys` will be used
-* `addHook`: If `false`, no hook is registered automatically, and instead the `fastify.verifyBearerAuth` and `fastify.verifyBearerAuthFactory` decorators are exposed.
-  If `true` or nullish, defaults to `onRequest`. `onRequest` or `preParsing` can also be used to register the respective hook
+* `addHook`: Accepts a boolean, `'onRequest'`, or `'preParsing'` (optional, defaults to `'onRequest'`):
+  * `true` registers an `onRequest` hook
+  * `'onRequest'` and `'preParsing'` registers their respective hooks
+  * `false` will not register a hook, and the `fastify.verifyBearerAuth` and `fastify.verifyBearerAuthFactory` decorators will be exposed
 * `verifyErrorLogLevel`: An optional string specifying the log level for verification errors.
   It must be a valid log level supported by Fastify, or an exception will be thrown when
   registering the plugin. By default, this option is set to `error`
