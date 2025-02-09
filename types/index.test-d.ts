@@ -90,6 +90,7 @@ expectType<verifyBearerAuth | undefined>(fastify().verifyBearerAuth)
 expectType<verifyBearerAuthFactory | undefined>(fastify().verifyBearerAuthFactory)
 
 expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_KEYS_OPTION_TYPE)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_HOOK)
 expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_LOG_LEVEL)
 expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_KEYS_OPTION_INVALID_KEY_TYPE)
 expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_SPEC)

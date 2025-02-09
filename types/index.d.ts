@@ -7,6 +7,7 @@ import { FastifyError } from '@fastify/error'
 
 declare interface FastifyBearerAuthErrors {
   FST_BEARER_AUTH_INVALID_KEYS_OPTION_TYPE: FastifyError
+  FST_BEARER_AUTH_INVALID_HOOK: FastifyError
   FST_BEARER_AUTH_INVALID_LOG_LEVEL: FastifyError
   FST_BEARER_AUTH_KEYS_OPTION_INVALID_KEY_TYPE: FastifyError
   FST_BEARER_AUTH_INVALID_SPEC: FastifyError
