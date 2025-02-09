@@ -1,6 +1,7 @@
 import fastify, { FastifyRequest } from 'fastify'
+import { FastifyError } from '@fastify/error'
 import { expectAssignable, expectType } from 'tsd'
-import bearerAuth, { FastifyBearerAuthOptions, verifyBearerAuth, verifyBearerAuthFactory } from '..'
+import bearerAuth, { FastifyBearerAuthErrors, FastifyBearerAuthOptions, verifyBearerAuth, verifyBearerAuthFactory } from '..'
 
 const pluginOptions: FastifyBearerAuthOptions = {
   keys: new Set(['foo']),
@@ -87,3 +88,11 @@ fastify().register(bearerAuth, pluginOptionsKeyArray)
 
 expectType<verifyBearerAuth | undefined>(fastify().verifyBearerAuth)
 expectType<verifyBearerAuthFactory | undefined>(fastify().verifyBearerAuthFactory)
+
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_KEYS_OPTION_TYPE)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_HOOK)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_LOG_LEVEL)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_KEYS_OPTION_INVALID_KEY_TYPE)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_SPEC)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_MISSING_AUTHORIZATION_HEADER)
+expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_AUTHORIZATION_HEADER)
