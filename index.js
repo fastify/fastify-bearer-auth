@@ -2,10 +2,19 @@
 
 const fp = require('fastify-plugin')
 const verifyBearerAuthFactory = require('./lib/verify-bearer-auth-factory')
-const { FST_BEARER_AUTH_INVALID_LOG_LEVEL } = require('./lib/errors')
+const { FST_BEARER_AUTH_INVALID_HOOK, FST_BEARER_AUTH_INVALID_LOG_LEVEL } = require('./lib/errors')
+
+/**
+ * Hook type limited to 'onRequest' and 'preParsing' to protect against DoS attacks.
+ * @see {@link https://github.com/fastify/fastify-auth?tab=readme-ov-file#hook-selection | fastify-auth hook selection}
+ */
+const validHooks = new Set(['onRequest', 'preParsing'])
 
 function fastifyBearerAuth (fastify, options, done) {
-  options = { addHook: true, verifyErrorLogLevel: 'error', ...options }
+  options = { verifyErrorLogLevel: 'error', ...options }
+  if (options.addHook === true || options.addHook == null) {
+    options.addHook = 'onRequest'
+  }
 
   if (
     Object.hasOwn(fastify.log, 'error') === false ||
@@ -26,8 +35,19 @@ function fastifyBearerAuth (fastify, options, done) {
   }
 
   try {
-    if (options.addHook === true) {
-      fastify.addHook('onRequest', verifyBearerAuthFactory(options))
+    if (options.addHook) {
+      if (!validHooks.has(options.addHook)) {
+        done(new FST_BEARER_AUTH_INVALID_HOOK())
+      }
+
+      if (options.addHook === 'preParsing') {
+        const verifyBearerAuth = verifyBearerAuthFactory(options)
+        fastify.addHook('preParsing', (request, reply, _payload, done) => {
+          verifyBearerAuth(request, reply, done)
+        })
+      } else {
+        fastify.addHook(options.addHook, verifyBearerAuthFactory(options))
+      }
     } else {
       fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
       fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
