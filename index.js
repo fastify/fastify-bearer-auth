@@ -11,46 +11,47 @@ const { FST_BEARER_AUTH_INVALID_HOOK, FST_BEARER_AUTH_INVALID_LOG_LEVEL } = requ
 const validHooks = new Set(['onRequest', 'preParsing'])
 
 function fastifyBearerAuth (fastify, options, done) {
-  options = { verifyErrorLogLevel: 'error', ...options }
-  if (options.addHook === true || options.addHook == null) {
-    options.addHook = 'onRequest'
+  const pluginOptions = { verifyErrorLogLevel: 'error', ...options }
+
+  if (pluginOptions.addHook === true || pluginOptions.addHook == null) {
+    pluginOptions.addHook = 'onRequest'
   }
 
   if (
     Object.hasOwn(fastify.log, 'error') === false ||
     typeof fastify.log.error !== 'function'
   ) {
-    options.verifyErrorLogLevel = null
+    pluginOptions.verifyErrorLogLevel = null
   }
 
   if (
-    options.verifyErrorLogLevel != null &&
+    pluginOptions.verifyErrorLogLevel != null &&
     (
-      typeof options.verifyErrorLogLevel !== 'string' ||
-      Object.hasOwn(fastify.log, options.verifyErrorLogLevel) === false ||
-      typeof fastify.log[options.verifyErrorLogLevel] !== 'function'
+      typeof pluginOptions.verifyErrorLogLevel !== 'string' ||
+      Object.hasOwn(fastify.log, pluginOptions.verifyErrorLogLevel) === false ||
+      typeof fastify.log[pluginOptions.verifyErrorLogLevel] !== 'function'
     )
   ) {
-    done(new FST_BEARER_AUTH_INVALID_LOG_LEVEL(options.verifyErrorLogLevel))
+    done(new FST_BEARER_AUTH_INVALID_LOG_LEVEL(pluginOptions.verifyErrorLogLevel))
   }
 
   try {
-    if (options.addHook) {
-      if (!validHooks.has(options.addHook)) {
+    if (pluginOptions.addHook) {
+      if (!validHooks.has(pluginOptions.addHook)) {
         done(new FST_BEARER_AUTH_INVALID_HOOK())
       }
 
-      if (options.addHook === 'preParsing') {
-        const verifyBearerAuth = verifyBearerAuthFactory(options)
+      if (pluginOptions.addHook === 'preParsing') {
+        const verifyBearerAuth = verifyBearerAuthFactory(pluginOptions)
         fastify.addHook('preParsing', (request, reply, _payload, done) => {
           verifyBearerAuth(request, reply, done)
         })
       } else {
-        fastify.addHook(options.addHook, verifyBearerAuthFactory(options))
+        fastify.addHook(pluginOptions.addHook, verifyBearerAuthFactory(pluginOptions))
       }
     } else {
       fastify.decorate('verifyBearerAuthFactory', verifyBearerAuthFactory)
-      fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(options))
+      fastify.decorate('verifyBearerAuth', verifyBearerAuthFactory(pluginOptions))
     }
     done()
   } catch (err) {
