@@ -23,6 +23,19 @@ test('success route succeeds', async (t) => {
   t.assert.deepStrictEqual(JSON.parse(response.body), { hello: 'world' })
 })
 
+test('registering plugin should not mutate options', (t, done) => {
+  t.plan(2)
+  const fastify = require('fastify')()
+  const options = {}
+  fastify.register(plugin, options)
+
+  fastify.ready((err) => {
+    t.assert.ifError(err)
+    t.assert.strictEqual(options.defaultRelation, undefined)
+    done()
+  })
+})
+
 test('invalid key route fails correctly', async (t) => {
   t.plan(2)
   const response = await fastify.inject({
