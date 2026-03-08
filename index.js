@@ -10,6 +10,13 @@ const { FST_BEARER_AUTH_INVALID_HOOK, FST_BEARER_AUTH_INVALID_LOG_LEVEL } = requ
  */
 const validHooks = new Set(['onRequest', 'preParsing'])
 
+/**
+ * @description Plugin to handle Bearer token authentication.
+ * The plugin can be configured to add either an 'onRequest' or 'preParsing' hook,
+ * or to decorate the Fastify instance with the underlying authentication functions
+ * for manual use.
+ * @type {typeof import('./types/index').fastifyBearerAuth}
+ */
 function fastifyBearerAuth (fastify, options, done) {
   const pluginOptions = { verifyErrorLogLevel: 'error', ...options }
 
