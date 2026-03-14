@@ -41,7 +41,7 @@ const pluginOptionsUndefined: FastifyBearerAuthOptions = {
 expectAssignable<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-  errorResponse?: (err: Error) => { error: string };
+  errorResponse?: (err: Error) => unknown;
   contentType?: string | undefined;
   bearerType?: string;
 }>(pluginOptions)
@@ -49,7 +49,7 @@ expectAssignable<{
 expectAssignable<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-  errorResponse?: (err: Error) => { error: string };
+  errorResponse?: (err: Error) => unknown;
   contentType?: string | undefined;
   bearerType?: string;
   addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
@@ -58,7 +58,7 @@ expectAssignable<{
 expectAssignable<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-  errorResponse?: (err: Error) => { error: string };
+  errorResponse?: (err: Error) => unknown;
   contentType?: string | undefined;
   bearerType?: string;
   addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
@@ -67,7 +67,7 @@ expectAssignable<{
 expectAssignable<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-  errorResponse?: (err: Error) => { error: string };
+  errorResponse?: (err: Error) => unknown;
   contentType?: string | undefined;
   bearerType?: string;
 }>(pluginOptionsAuthPromise)
@@ -75,7 +75,7 @@ expectAssignable<{
 expectAssignable<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-  errorResponse?: (err: Error) => { error: string };
+  errorResponse?: (err: Error) => unknown;
   contentType?: string | undefined;
   bearerType?: string;
   specCompliance?: 'rfc6749' | 'rfc6750';

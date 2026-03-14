@@ -28,7 +28,7 @@ declare namespace fastifyBearerAuth {
   export interface FastifyBearerAuthOptions {
     keys: Set<string> | string[];
     auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-    errorResponse?: (err: Error) => { error: string };
+    errorResponse?: (err: Error) => unknown;
     contentType?: string | undefined;
     bearerType?: string;
     specCompliance?: 'rfc6749' | 'rfc6750';
