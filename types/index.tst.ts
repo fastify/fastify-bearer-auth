@@ -1,7 +1,12 @@
 import fastify, { FastifyRequest } from 'fastify'
 import { FastifyError } from '@fastify/error'
-import { expectAssignable, expectType } from 'tsd'
-import bearerAuth, { FastifyBearerAuthErrors, FastifyBearerAuthOptions, verifyBearerAuth, verifyBearerAuthFactory } from '..'
+import { expect } from 'tstyche'
+import bearerAuth, {
+  type FastifyBearerAuthOptions,
+  type verifyBearerAuth,
+  type verifyBearerAuthFactory,
+  FastifyBearerAuthErrors
+} from '..'
 
 const pluginOptions: FastifyBearerAuthOptions = {
   keys: new Set(['foo']),
@@ -31,48 +36,44 @@ const pluginOptionsKeyArray: FastifyBearerAuthOptions = {
 
 const pluginOptionsUndefined: FastifyBearerAuthOptions = {
   keys: ['foo'],
-  auth: undefined,
   errorResponse: (err: Error) => { return { error: err.message } },
-  contentType: undefined,
-  bearerType: undefined,
-  addHook: undefined
 }
 
-expectAssignable<{
+expect(pluginOptions).type.toBeAssignableTo<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
   contentType?: string | undefined;
   bearerType?: string;
-}>(pluginOptions)
+}>()
 
-expectAssignable<{
-  keys: Set<string> | string[];
-  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
-  errorResponse?: (err: Error) => { error: string };
-  contentType?: string | undefined;
-  bearerType?: string;
-  addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
-}>(pluginOptionsKeyArray)
-
-expectAssignable<{
+expect(pluginOptionsKeyArray).type.toBeAssignableTo<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
   contentType?: string | undefined;
   bearerType?: string;
   addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
-}>(pluginOptionsUndefined)
+}>()
 
-expectAssignable<{
+expect(pluginOptionsUndefined).type.toBeAssignableTo<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
   contentType?: string | undefined;
   bearerType?: string;
-}>(pluginOptionsAuthPromise)
+  addHook?: boolean | 'onRequest' | 'preParsing' | undefined;
+}>()
 
-expectAssignable<{
+expect(pluginOptionsAuthPromise).type.toBeAssignableTo<{
+  keys: Set<string> | string[];
+  auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
+  errorResponse?: (err: Error) => { error: string };
+  contentType?: string | undefined;
+  bearerType?: string;
+}>()
+
+expect(pluginOptionsAuthPromise).type.toBeAssignableTo<{
   keys: Set<string> | string[];
   auth?: (key: string, req: FastifyRequest) => boolean | Promise<boolean> | undefined;
   errorResponse?: (err: Error) => { error: string };
@@ -80,19 +81,33 @@ expectAssignable<{
   bearerType?: string;
   specCompliance?: 'rfc6749' | 'rfc6750';
   verifyErrorLogLevel?: string;
-}>(pluginOptionsAuthPromise)
+}>()
 
 fastify().register(bearerAuth, pluginOptions)
 fastify().register(bearerAuth, pluginOptionsAuthPromise)
 fastify().register(bearerAuth, pluginOptionsKeyArray)
 
-expectType<verifyBearerAuth | undefined>(fastify().verifyBearerAuth)
-expectType<verifyBearerAuthFactory | undefined>(fastify().verifyBearerAuthFactory)
+expect(fastify().verifyBearerAuth).type.toBe<verifyBearerAuth | undefined>()
+expect(fastify().verifyBearerAuthFactory).type.toBe<verifyBearerAuthFactory | undefined>()
 
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_KEYS_OPTION_TYPE)
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_HOOK)
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_LOG_LEVEL)
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_KEYS_OPTION_INVALID_KEY_TYPE)
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_SPEC)
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_MISSING_AUTHORIZATION_HEADER)
-expectType<FastifyError>(FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_AUTHORIZATION_HEADER)
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_KEYS_OPTION_TYPE
+).type.toBeAssignableTo<FastifyError>()
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_HOOK
+).type.toBeAssignableTo<FastifyError>()
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_LOG_LEVEL
+).type.toBeAssignableTo<FastifyError>()
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_KEYS_OPTION_INVALID_KEY_TYPE
+).type.toBeAssignableTo<FastifyError>()
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_SPEC
+).type.toBeAssignableTo<FastifyError>()
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_MISSING_AUTHORIZATION_HEADER
+).type.toBeAssignableTo<FastifyError>()
+expect(
+  FastifyBearerAuthErrors.FST_BEARER_AUTH_INVALID_AUTHORIZATION_HEADER
+).type.toBeAssignableTo<FastifyError>()
