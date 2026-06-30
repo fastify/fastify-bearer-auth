@@ -56,7 +56,7 @@ fastify.listen({port: 8000}, (err) => {
 
 *@fastify/bearer-auth* exports a standard [Fastify plugin](https://github.com/fastify/fastify-plugin).
 This allows registering the plugin within scoped paths, so some paths can be protected
-by the plugin while others are not. See the [Fastify](https://fastify.dev/docs/latest)
+by the plugin while others are not. See the [Fastify](https://fastify.dev/docs/latest/)
 documentation and examples for more details.
 
 When registering the plugin a configuration object must be specified:
@@ -105,7 +105,7 @@ The default configuration object is:
 
 The plugin registers a standard Fastify [onRequest hook][onrequesthook] to inspect the request's
 headers for an `authorization` header in the format `bearer key`. The `key` is matched against
-the configured `keys` object using a [constant time algorithm](https://en.wikipedia.org/wiki/Time_complexity#Constant_time)
+the configured `keys` object using a [constant time algorithm](https://en.wikipedia.org/wiki/Time_complexity)
 to prevent [timing-attacks](https://snyk.io/blog/node-js-timing-attack-ccc-ctf/). If the
 `authorization` header is missing, malformed, or the `key` does not validate, a 401 response
 is sent with a `{error: message}` body, and no further request processing is performed.
